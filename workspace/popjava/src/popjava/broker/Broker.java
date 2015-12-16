@@ -330,9 +330,12 @@ public final class Broker {
 					popInfo.getClass().getName(),
 					request.getClassId(), request.getMethodId(),
 					e.getMessage());
+			e.printStackTrace();
 		}
+		
 		// Get parameter if found the method
 		if (exception == null && method != null) {
+			System.out.println("Call method "+method.getName());
 
 			returnType = method.getReturnType();
 			parameterTypes = method.getParameterTypes();
@@ -344,6 +347,8 @@ public final class Broker {
 			}catch(POPException e){
 				exception = e;
 			}
+		}else{
+			System.out.println("GOT AN ERROR "+(exception == null) +" "+(method == null)+" "+request.getClassId()+" "+request.getMethodId());
 		}
 		
 		normalizePOPParamameters(parameters);
