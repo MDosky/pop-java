@@ -1,3 +1,7 @@
+# Build path
+/build
+/nbproject
+
 # Documentation artifacts
 /docs/_build
 /doxygen
