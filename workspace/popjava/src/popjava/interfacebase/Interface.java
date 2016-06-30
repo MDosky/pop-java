@@ -695,7 +695,12 @@ public class Interface {
 			case DEAMON:
 				POPJavaDeamonConnector connector;
 				try {
-					connector = new POPJavaDeamonConnector(hostname);
+					if(rport == null || rport.isEmpty()) {
+						connector = new POPJavaDeamonConnector(hostname);
+					} else {
+						int port = Integer.parseInt(rport);
+						connector = new POPJavaDeamonConnector(hostname, port);
+					}
 					if(connector.sendCommand(od.getConnectionSecret(), argvList)){
 						ret = 0;
 					}
