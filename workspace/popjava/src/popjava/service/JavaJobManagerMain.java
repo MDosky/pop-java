@@ -42,6 +42,15 @@ public class JavaJobManagerMain implements Runnable {
         JavaJobManager jobM;
         jobM = PopJava.newActive(JavaJobManager.class, pap);
 
+        System.out.println("Created ;)");
+        
+        PopJava.newActive(JavaJobManager.class, pap);
+        PopJava.newActive(JavaJobManager.class, pap);
+        PopJava.newActive(JavaJobManager.class, pap);
+        
+        System.out.println("Created another 3 :o");
+        
+        
         POPSystem.end();
     }
 
