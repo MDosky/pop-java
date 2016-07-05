@@ -38,7 +38,7 @@ public class JavaJobManagerMain implements Runnable {
             }
         }).start();
 
-        POPAccessPoint pap = new POPAccessPoint(String.format("socket://%s://%s:%d", ComboxSocketFactory.PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT));
+        POPAccessPoint pap = new POPAccessPoint(String.format("%s://%s:%d", ComboxSocketFactory.PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT));
         JavaJobManager jobM;
         jobM = PopJava.newActive(JavaJobManager.class, pap);
 
