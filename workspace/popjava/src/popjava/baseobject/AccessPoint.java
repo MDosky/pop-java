@@ -1,6 +1,7 @@
 package popjava.baseobject;
 
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 import popjava.system.POPSystem;
 
@@ -65,6 +66,7 @@ public class AccessPoint {
 		String host = "";
 		int port = 0;
 		String[] args = accessString.split("://|:");
+		System.out.println(Arrays.toString(args));
 		String[] datas = new String[3];
 		int n = 0;
 		for (int i = 0; i < args.length; i++) {
