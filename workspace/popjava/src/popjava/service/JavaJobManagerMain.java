@@ -29,10 +29,13 @@ public class JavaJobManagerMain implements Runnable {
         //jobServer = new ServerSocket(POPJobManager.DEFAULT_PORT);
         POPSystem.initialize(args);
 
-        new Thread(() -> {
-            ComboxSocketFactory csf = new ComboxSocketFactory();
-            AccessPoint accessPoint = new AccessPoint(AccessPoint.SOCKET_PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT);
-            ComboxServer cs = csf.createServerCombox(accessPoint, null, Broker.getBroker());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ComboxSocketFactory csf = new ComboxSocketFactory();
+                AccessPoint accessPoint = new AccessPoint(AccessPoint.SOCKET_PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT);
+                ComboxServer cs = csf.createServerCombox(accessPoint, null, Broker.getBroker());
+            }
         }).start();
 
         POPAccessPoint pap = new POPAccessPoint(String.format("socket://%s://%s:%d", ComboxSocketFactory.PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT));
