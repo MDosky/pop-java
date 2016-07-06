@@ -298,8 +298,7 @@ public final class Broker {
 					throw new POPException(
 							POPErrorCode.UNKNOWN_EXCEPTION,
 							"Unknown exception when get parameter "
-									+ parameterTypes[index].getName() +
-								" \n " + e.getStackTrace());
+									+ parameterTypes[index].getName());
 				}
 			}
 		}
