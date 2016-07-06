@@ -374,12 +374,12 @@ public class ObjectDescriptionInput implements IPOPBaseInput {
 //		power.serialize(buffer);
 //		memory.serialize(buffer);
 //		bandwidth.serialize(buffer);
-		buffer.putFloat(powerReq);
-		buffer.putFloat(powerMin);
-		buffer.putFloat(memoryReq);
-		buffer.putFloat(memoryMin);
-		buffer.putFloat(bandwidthReq);
-		buffer.putFloat(bandwidthMin);
+//		buffer.putFloat(powerReq);
+//		buffer.putFloat(powerMin);
+//		buffer.putFloat(memoryReq);
+//		buffer.putFloat(memoryMin);
+//		buffer.putFloat(bandwidthReq);
+//		buffer.putFloat(bandwidthMin);
 		buffer.putFloat(wallTime);
 		buffer.putBoolean(isManual);
 		buffer.putString(cwd);
@@ -454,42 +454,42 @@ public class ObjectDescriptionInput implements IPOPBaseInput {
 //		ODElement power = ODElement.deserialize(buffer);
 //		ODElement memory = ODElement.deserialize(buffer);
 //		ODElement bandwidth = ODElement.deserialize(buffer);
-//		float walltime = buffer.getFloat();
-//		boolean isManual = buffer.getBoolean();
-//		String cwd = buffer.getString();
-//		int searchMaxDepth = buffer.getInt();
-//		int searchMacReq = buffer.getInt();
-//		int waitingtime = buffer.getInt();
-//		String hostName = buffer.getString();
-//		String user = buffer.getString();
-//		String core = buffer.getString();
-//		String arch = buffer.getString();
-//		String batch = buffer.getString();
-//		String jobUrl = buffer.getString();
-//		String codeFile = buffer.getString();
-//		String platform = buffer.getString();
-//		String protocol = buffer.getString();
-//		String encoding = buffer.getString();
+		float walltime = buffer.getFloat();
+		boolean isManual = buffer.getBoolean();
+		String cwd = buffer.getString();
+		int searchMaxDepth = buffer.getInt();
+		int searchMacReq = buffer.getInt();
+		int waitingtime = buffer.getInt();
+		String hostName = buffer.getString();
+		String user = buffer.getString();
+		String core = buffer.getString();
+		String arch = buffer.getString();
+		String batch = buffer.getString();
+		String jobUrl = buffer.getString();
+		String codeFile = buffer.getString();
+		String platform = buffer.getString();
+		String protocol = buffer.getString();
+		String encoding = buffer.getString();
 //		this.setPower(power);
 //		this.setMemory(memory);
 //		this.setBandwidth(bandwidth);
-//		this.setWallTime(walltime);
-//		this.setHostname(hostName);
-//		this.setJobUrl(jobUrl);
-//		this.setCodeFile(codeFile);
-//		this.setPlatform(platform);
-//		this.setProtocol(protocol);
-//		this.setEncoding(encoding);
-//		this.setHostname(hostName);
-//
-//		// put the attributes
-//		this.attributes.clear();
-//		int attributeCount = buffer.getInt();
-//		for (int i = 0; i < attributeCount; i++) {
-//			String key = buffer.getString();
-//			String value = buffer.getString();
-//			setValue(key, value);
-//		}
+		this.setWallTime(walltime);
+		this.setHostname(hostName);
+		this.setJobUrl(jobUrl);
+		this.setCodeFile(codeFile);
+		this.setPlatform(platform);
+		this.setProtocol(protocol);
+		this.setEncoding(encoding);
+		this.setHostname(hostName);
+
+		// put the attributes
+		this.attributes.clear();
+		int attributeCount = buffer.getInt();
+		for (int i = 0; i < attributeCount; i++) {
+			String key = buffer.getString();
+			String value = buffer.getString();
+			setValue(key, value);
+		}
 		return true;
 	}
 }
