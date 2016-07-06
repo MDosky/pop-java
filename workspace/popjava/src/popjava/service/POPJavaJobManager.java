@@ -4,25 +4,25 @@ import java.util.Arrays;
 import popjava.annotation.POPClass;
 import popjava.annotation.POPObjectDescription;
 import popjava.annotation.POPSyncMutex;
+import popjava.base.POPObject;
 import popjava.baseobject.POPAccessPoint;
 import popjava.dataswaper.ObjectDescriptionInput;
-import popjava.serviceadapter.POPJobManager;
-import popjava.serviceadapter.POPJobService;
 
 /**
  *
  * @author Dosky
  */
-@POPClass
-public class JavaJobManager extends POPJobService {
+@POPClass(classId = 99924, deconstructor = false)
+public class POPJavaJobManager extends POPObject {
 
-    public JavaJobManager() {
+    @POPObjectDescription(url = "localhost")
+    public POPJavaJobManager() {
     }
 
-    public JavaJobManager(String challenge) {
+    @POPObjectDescription(url = "localhost")
+    public POPJavaJobManager(String challenge) {
     }
 
-    @Override
     @POPSyncMutex
     public int createObject(POPAccessPoint localservice, String objname,
             ObjectDescriptionInput od, int howmany, POPAccessPoint[] objcontacts, int howmany2, POPAccessPoint[] remotejobcontacts) {

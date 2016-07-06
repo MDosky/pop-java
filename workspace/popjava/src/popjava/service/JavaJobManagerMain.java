@@ -18,54 +18,53 @@ import popjava.system.POPSystem;
  */
 public class JavaJobManagerMain implements Runnable {
 
-    ServerSocket jobServer;
+	ServerSocket jobServer;
 
-    public static void main(String[] args) throws IOException {
-        JavaJobManagerMain main = new JavaJobManagerMain(args);
-        main.start();
-    }
+	public static void main(String[] args) throws IOException {
+		JavaJobManagerMain main = new JavaJobManagerMain(args);
+		main.start();
+	}
 
-    public JavaJobManagerMain(String... args) throws IOException {
-        //jobServer = new ServerSocket(POPJobManager.DEFAULT_PORT);
-        POPSystem.initialize(args);
+	public JavaJobManagerMain(String... args) throws IOException {
+		//jobServer = new ServerSocket(POPJobManager.DEFAULT_PORT);
+		POPSystem.initialize(args);
 
-	System.out.println("Initialized");
-		
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ComboxSocketFactory csf = new ComboxSocketFactory();
-                AccessPoint accessPoint = new AccessPoint(AccessPoint.SOCKET_PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT);
-                ComboxServer cs = csf.createServerCombox(accessPoint, null, Broker.getBroker());
-            }
-        }).start();
-		
-	System.out.println("Thread started");
+		System.out.println("Initialized");
 
-        POPAccessPoint pap = new POPAccessPoint(String.format("%s://%s:%d", ComboxSocketFactory.PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT));
-		
-	System.out.println("AP Created");
-	
-        JavaJobManager jobM;
-        jobM = PopJava.newActive(JavaJobManager.class, pap);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				ComboxSocketFactory csf = new ComboxSocketFactory();
+				AccessPoint accessPoint = new AccessPoint(AccessPoint.SOCKET_PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT);
+				ComboxServer cs = csf.createServerCombox(accessPoint, null, Broker.getBroker());
+			}
+		}).start();
 
-        System.out.println("Created ;)");
-        
-        PopJava.newActive(JavaJobManager.class, pap);
-        PopJava.newActive(JavaJobManager.class, pap);
-        PopJava.newActive(JavaJobManager.class, pap);
-        
-        System.out.println("Created another 3 :o");
-        
-        
-        POPSystem.end();
-    }
+		System.out.println("Thread started");
 
-    private void start() {
-    }
+		POPAccessPoint pap = new POPAccessPoint(String.format("%s://%s:%d", ComboxSocketFactory.PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT));
 
-    @Override
-    public void run() {
+		System.out.println("AP Created");
 
-    }
+		POPJavaJobManager jobM;
+		jobM = PopJava.newActive(POPJavaJobManager.class);
+
+		System.out.println("Created ;)");
+
+		PopJava.newActive(POPJavaJobManager.class);
+		PopJava.newActive(POPJavaJobManager.class);
+		PopJava.newActive(POPJavaJobManager.class);
+
+		System.out.println("Created another 3 :o");
+
+		POPSystem.end();
+	}
+
+	private void start() {
+	}
+
+	@Override
+	public void run() {
+
+	}
 }

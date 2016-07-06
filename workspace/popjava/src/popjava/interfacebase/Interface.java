@@ -31,6 +31,7 @@ import popjava.combox.ComboxAllocateSocket;
 import popjava.combox.ComboxFactoryFinder;
 import popjava.dataswaper.ObjectDescriptionInput;
 import popjava.dataswaper.POPString;
+import popjava.service.JobManagerService;
 import popjava.service.POPJavaDeamonConnector;
 import popjava.serviceadapter.POPAppService;
 import popjava.serviceadapter.POPJobManager;
@@ -224,7 +225,7 @@ public class Interface {
         POPJobService jobManager = null;
         try{
         	if(Configuration.CONNECT_TO_POPCPP){
-        		jobManager = PopJava.newActive(POPJobService.class, jobContact);
+        		jobManager = PopJava.newActive(JobManagerService.class, jobContact);
         	}
         }catch(Exception e){
         	e.printStackTrace();
