@@ -34,50 +34,12 @@ public class JavaJobManagerMain implements Runnable {
 	POPAccessPoint pap;
 	
 	public JavaJobManagerMain(String... args) throws IOException {
-		//jobServer = new ServerSocket(POPJobManager.DEFAULT_PORT);
 		POPSystem.initialize(args);
 
-		System.out.println("Initialized");
-
-//		new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				ComboxFactory cf = new ComboxSocketFactory();
-//				AccessPoint accessPoint = new AccessPoint(AccessPoint.SOCKET_PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT);
-//				ComboxServer cs = cf.createServerCombox(accessPoint, null, Broker.getBroker());
-//			}
-//		}).start();
-
-//		System.out.println("Thread started");
-//
-//		pap = new POPAccessPoint(String.format("%s://%s:%d", AccessPoint.SOCKET_PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT));
-//
-//		System.out.println("AP Created");
-//		
-//		new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				try {
-//					Thread.sleep(10000);
-//					int createObject = jobM.createObject(pap, "What?!", new ObjectDescriptionInput(), 1, new POPAccessPoint[1], 1, new POPAccessPoint[1]);
-//					Thread.sleep(2000);
-//					System.exit(0);
-//				} catch (InterruptedException ex) {
-//					Logger.getLogger(JavaJobManagerMain.class.getName()).log(Level.SEVERE, null, ex);
-//				}
-//			}
-//		}).start();
-		
-//		try {
-//			Thread.sleep(1000);
-//		} catch (InterruptedException ex) {
-//			Logger.getLogger(JavaJobManagerMain.class.getName()).log(Level.SEVERE, null, ex);
-//		}
-		
+		System.out.println("[JM] Initilizing");
 		jobM = PopJava.newActive(POPJavaJobManager.class);
-
+		System.out.println("[JM] Initialized");
 		
-//		POPSystem.end();
 	}
 
 	private void start() {
