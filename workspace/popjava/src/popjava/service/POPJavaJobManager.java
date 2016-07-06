@@ -43,9 +43,9 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 	private final List<DaemonInfo> daemons;
 	private final int size;
-	private final Random rnd;
 
 	private ObjectDescription nod;
+	private int current = 0;
 
 	@POPObjectDescription(url = "localhost:2711")
 	public POPJavaJobManager() {
@@ -56,7 +56,12 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	public POPJavaJobManager(List<DaemonInfo> daemons) {
 		this.daemons = Collections.unmodifiableList(daemons);
 		this.size = daemons.size();
-		this.rnd = new SecureRandom();
+	}
+	
+	private int getNextHost() {
+		int c = current;
+		current = (current + 1) % size; 
+		return c;
 	}
 
 	@Override
@@ -73,24 +78,13 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		if (howmany <= 0) {
 			return 0;
 		}
-			
-		// sanitize how many
-		int n = 1;
-		if (howmany > 0) {
-			n = howmany;
-		}
-
-		System.out.println("Request received");
-		System.out.println("My Daemons: " + Arrays.toString(daemons.toArray(new DaemonInfo[0])));
 
 		try {
-			objcontacts = new POPAccessPoint[n];
 			POPAccessPoint pap;
 			DaemonInfo di;
-			for (int i = 0; i < n; i++) {
-				System.out.println("Handling req " + (i + 1));
+			for (int i = 0; i < howmany; i++) {
 				// connection info, random from pool
-				di = daemons.get(rnd.nextInt(size));
+				di = daemons.get(getNextHost());
 				// new od
 				nod = POPSystem.getDefaultOD();
 				// set daemon infromations
