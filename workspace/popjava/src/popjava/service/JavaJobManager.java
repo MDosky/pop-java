@@ -13,9 +13,9 @@ import popjava.serviceadapter.POPJobService;
  *
  * @author Dosky
  */
+@POPClass
 public class JavaJobManager extends POPJobService {
 
-    @POPObjectDescription(url = "localhost:" + POPJobManager.DEFAULT_PORT)
     public JavaJobManager() {
     }
 
