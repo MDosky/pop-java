@@ -12,6 +12,7 @@ import popjava.annotation.POPClass;
 import popjava.annotation.POPObjectDescription;
 import popjava.annotation.POPParameter;
 import popjava.annotation.POPSyncConc;
+import popjava.base.POPErrorCode;
 import popjava.base.POPException;
 import popjava.base.POPObject;
 import popjava.baseobject.ConnectionType;
@@ -43,7 +44,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	private final List<DaemonInfo> daemons;
 	private final int size;
 	private final Random rnd;
-	
+
 	private ObjectDescription nod;
 
 	@POPObjectDescription(url = "localhost:2711")
@@ -64,35 +65,45 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		ObjectDescriptionInput od,
 		int howmany, @POPParameter(POPParameter.Direction.OUT) POPAccessPoint[] objcontacts,
 		int howmany2, @POPParameter(POPParameter.Direction.OUT) POPAccessPoint[] remotejobcontacts) {
-
+		
+		// skip if it's not a request
+		if (howmany <= 0) {
+			return 0;
+		}
+			
 		// sanitize how many
 		int n = 1;
 		if (howmany > 0) {
 			n = howmany;
 		}
-		
+
 		System.out.println("Request received");
 		System.out.println("My Daemons: " + Arrays.toString(daemons.toArray(new DaemonInfo[0])));
 
-		objcontacts = new POPAccessPoint[n];
-		POPAccessPoint pap;
-		DaemonInfo di;
-		for(int i = 0; i < n; i++) {
-			System.out.println("Handling req " + (i+1));
-			// connection info, random from pool
-			di = daemons.get(rnd.nextInt(size));
-			// new od
-			nod = POPSystem.getDefaultOD();
-			// set daemon infromations
-			nod.setHostname(objname);
-			nod.setHostname(String.format("%s:%d", di.hostname, di.port));
-			nod.setConnectionSecret(di.password);
-			nod.setConnectionType(ConnectionType.DEAMON);
-			// out access point
-			pap = new POPAccessPoint();
-			// taken from Interface.java
-			tryLocal(objname, pap);
-			objcontacts[i] = pap;
+		try {
+			objcontacts = new POPAccessPoint[n];
+			POPAccessPoint pap;
+			DaemonInfo di;
+			for (int i = 0; i < n; i++) {
+				System.out.println("Handling req " + (i + 1));
+				// connection info, random from pool
+				di = daemons.get(rnd.nextInt(size));
+				// new od
+				nod = POPSystem.getDefaultOD();
+				// set daemon infromations
+				nod.setHostname(objname);
+				nod.setHostname(String.format("%s:%d", di.hostname, di.port));
+				nod.setConnectionSecret(di.password);
+				nod.setConnectionType(ConnectionType.DEAMON);
+				// out access point
+				pap = new POPAccessPoint();
+				// taken from Interface.java
+				tryLocal(objname, pap);
+				objcontacts[i] = pap;
+			}
+		} catch(Exception e) {
+			LogWriter.writeDebugInfo(String.format("Exception in JogMgr::CreateObject: %s", e.getMessage()));
+			return POPErrorCode.POP_JOBSERVICE_FAIL;
 		}
 
 		return 0;
