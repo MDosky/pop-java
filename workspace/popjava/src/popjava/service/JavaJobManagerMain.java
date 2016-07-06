@@ -2,18 +2,8 @@ package popjava.service;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import popjava.PopJava;
-import popjava.baseobject.AccessPoint;
-import popjava.baseobject.ObjectDescription;
 import popjava.baseobject.POPAccessPoint;
-import popjava.broker.Broker;
-import popjava.combox.ComboxFactory;
-import popjava.combox.ComboxServer;
-import popjava.combox.ComboxSocketFactory;
-import popjava.dataswaper.ObjectDescriptionInput;
-import popjava.serviceadapter.POPJobManager;
 import popjava.system.POPSystem;
 
 /**

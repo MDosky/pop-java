@@ -224,19 +224,14 @@ public class Interface {
         			.getHostIP(), POPJobManager.DEFAULT_PORT));
         }
 
-		System.out.println("Starting JM");
         JobManagerService jobManager = null;
-        try{
+        try {
         	if(Configuration.CONNECT_TO_POPCPP){
-				System.out.println("CPP JM");
         		jobManager = PopJava.newActive(POPJobService.class, jobContact);
         	} else {
-				System.out.println("Java JM");
         		jobManager = PopJava.newActive(POPJavaJobManager.class, jobContact);
 			}
-        }catch(Exception e){
-			System.out.println("Java Ex JM");	
-			jobManager = PopJava.newActive(POPJavaJobManager.class, jobContact);
+        } catch(Exception e) {
         	e.printStackTrace();
         }
         
@@ -246,7 +241,8 @@ public class Interface {
         
         ObjectDescriptionInput constOd = new ObjectDescriptionInput(od);
         
-		System.out.println("Creating");
+		System.out.println(String.format("%s %s %s %s %s %s %s", POPSystem.appServiceAccessPoint, objectName, constOd, allocatedAccessPoint.length, 
+        		allocatedAccessPoint, remotejobscontact.length, remotejobscontact));
         int createdCode = jobManager.createObject(POPSystem.appServiceAccessPoint, objectName, constOd, allocatedAccessPoint.length, 
         		allocatedAccessPoint, remotejobscontact.length, remotejobscontact);
 		jobManager.exit();
