@@ -61,6 +61,7 @@ public class PopJava {
 	 */
 	public static <T> T newActive(Class<T> targetClass,
 			POPAccessPoint accessPoint) throws POPException {
+		System.out.println("Starting POPSystem");
 	    POPSystem.start();
 		PJProxyFactory factoryProxy = new PJProxyFactory(targetClass);
 		return (T)factoryProxy.bindPOPObject(accessPoint);

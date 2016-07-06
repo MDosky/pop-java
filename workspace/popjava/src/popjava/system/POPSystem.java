@@ -249,11 +249,13 @@ public class POPSystem {
 	}
 	
 	public synchronized static boolean start(){
+		System.out.println("POPS " + isStarted);
 	    if(isStarted){
 	        return true;
 	    }
 	    isStarted = true;
 	    
+		System.out.println("jobService");
 	    jobService.setAccessString(jobservice);
         if (appservicecode == null || appservicecode.length() == 0) {
             appservicecode = POPJavaConfiguration.getPopAppCoreService();
@@ -263,6 +265,7 @@ public class POPSystem {
             return false;
         }
         
+		System.out.println("STarting core services");
         coreServiceManager = getCoreService(proxy, appservicecontact, appservicecode);
         
         if(coreServiceManager != null){
@@ -284,6 +287,7 @@ public class POPSystem {
                 POPJavaConfiguration.getPopJavaJar(),
                 getNeededClasspath());
         
+		System.out.println("start code service");
         initialized = initCodeService(codeconf, popJavaObjectExecuteCommand, coreServiceManager);
 	    
         return initialized;
