@@ -31,14 +31,14 @@ public class JavaJobManagerMain implements Runnable {
 
 		System.out.println("Initialized");
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				ComboxSocketFactory csf = new ComboxSocketFactory();
-				AccessPoint accessPoint = new AccessPoint(AccessPoint.SOCKET_PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT);
-				ComboxServer cs = csf.createServerCombox(accessPoint, null, Broker.getBroker());
-			}
-		}).start();
+//		new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//				ComboxSocketFactory csf = new ComboxSocketFactory();
+//				AccessPoint accessPoint = new AccessPoint(AccessPoint.SOCKET_PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT);
+//				ComboxServer cs = csf.createServerCombox(accessPoint, null, Broker.getBroker());
+//			}
+//		}).start();
 
 		System.out.println("Thread started");
 
@@ -47,15 +47,7 @@ public class JavaJobManagerMain implements Runnable {
 		System.out.println("AP Created");
 
 		POPJavaJobManager jobM;
-		jobM = PopJava.newActive(POPJavaJobManager.class);
-
-		System.out.println("Created ;)");
-
-		PopJava.newActive(POPJavaJobManager.class);
-		PopJava.newActive(POPJavaJobManager.class);
-		PopJava.newActive(POPJavaJobManager.class);
-
-		System.out.println("Created another 3 :o");
+		jobM = PopJava.newActive(POPJavaJobManager.class, pap);
 
 		POPSystem.end();
 	}
