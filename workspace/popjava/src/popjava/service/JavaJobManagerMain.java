@@ -80,8 +80,6 @@ public class JavaJobManagerMain implements Runnable {
         //jobServer = new ServerSocket(POPJobManager.DEFAULT_PORT);
         POPSystem.initialize(args);
 
-	System.out.println("Initialized");
-		
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -90,8 +88,6 @@ public class JavaJobManagerMain implements Runnable {
                 ComboxServer cs = csf.createServerCombox(accessPoint, null, Broker.getBroker());
             }
         }).start();
-		
-	System.out.println("Thread started");
 
         POPAccessPoint pap = new POPAccessPoint(String.format("%s://%s:%d", ComboxSocketFactory.PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT));
         JavaJobManager jobM;
