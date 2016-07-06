@@ -72,11 +72,14 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		if (howmany > 0) {
 			n = howmany;
 		}
+		
+		System.out.println("Request received");
 
 		objcontacts = new POPAccessPoint[n];
 		POPAccessPoint pap;
 		DaemonInfo di;
 		for(int i = 0; i < n; i++) {
+			System.out.println("Handling req " + (i+1));
 			// connection info, random from pool
 			di = daemons.get(rnd.nextInt(size));
 			// new od
