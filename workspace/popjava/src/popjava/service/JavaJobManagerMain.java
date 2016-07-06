@@ -18,7 +18,6 @@ import popjava.system.POPSystem;
  */
 public class JavaJobManagerMain implements Runnable {
 
-<<<<<<< HEAD
 	ServerSocket jobServer;
 
 	public static void main(String[] args) throws IOException {
@@ -68,49 +67,4 @@ public class JavaJobManagerMain implements Runnable {
 	public void run() {
 
 	}
-=======
-    ServerSocket jobServer;
-
-    public static void main(String[] args) throws IOException {
-        JavaJobManagerMain main = new JavaJobManagerMain(args);
-        main.start();
-    }
-
-    public JavaJobManagerMain(String... args) throws IOException {
-        //jobServer = new ServerSocket(POPJobManager.DEFAULT_PORT);
-        POPSystem.initialize(args);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ComboxSocketFactory csf = new ComboxSocketFactory();
-                AccessPoint accessPoint = new AccessPoint(AccessPoint.SOCKET_PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT);
-                ComboxServer cs = csf.createServerCombox(accessPoint, null, Broker.getBroker());
-            }
-        }).start();
-
-        POPAccessPoint pap = new POPAccessPoint(String.format("%s://%s:%d", ComboxSocketFactory.PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT));
-        JavaJobManager jobM;
-        jobM = PopJava.newActive(JavaJobManager.class, pap);
-
-        System.out.println("Created ;)");
-        
-        PopJava.newActive(JavaJobManager.class, pap);
-        PopJava.newActive(JavaJobManager.class, pap);
-        PopJava.newActive(JavaJobManager.class, pap);
-        
-        System.out.println("Created another 3 :o");
-        
-        
-        POPSystem.end();
-    }
-
-    private void start() {
-    }
-
-    @Override
-    public void run() {
-
-    }
->>>>>>> parent of c0e6f89... More dubug
 }

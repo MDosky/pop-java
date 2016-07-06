@@ -33,6 +33,7 @@ import popjava.dataswaper.ObjectDescriptionInput;
 import popjava.dataswaper.POPString;
 import popjava.service.JobManagerService;
 import popjava.service.POPJavaDeamonConnector;
+import popjava.service.POPJavaJobManager;
 import popjava.serviceadapter.POPAppService;
 import popjava.serviceadapter.POPJobManager;
 import popjava.serviceadapter.POPJobService;
@@ -222,12 +223,19 @@ public class Interface {
         			.getHostIP(), POPJobManager.DEFAULT_PORT));
         }
 
-        POPJobService jobManager = null;
+		System.out.println("Starting JM");
+        JobManagerService jobManager = null;
         try{
         	if(Configuration.CONNECT_TO_POPCPP){
-        		jobManager = PopJava.newActive(JobManagerService.class, jobContact);
-        	}
+				System.out.println("CPP JM");
+        		jobManager = PopJava.newActive(POPJobService.class, jobContact);
+        	} else {
+				System.out.println("Java JM");
+        		jobManager = PopJava.newActive(POPJavaJobManager.class, jobContact);
+			}
         }catch(Exception e){
+			System.out.println("Java Ex JM");	
+			jobManager = PopJava.newActive(POPJavaJobManager.class, jobContact);
         	e.printStackTrace();
         }
         
@@ -237,9 +245,11 @@ public class Interface {
         
         ObjectDescriptionInput constOd = new ObjectDescriptionInput(od);
         
+		System.out.println("Creating");
         int createdCode = jobManager.createObject(POPSystem.appServiceAccessPoint, objectName, constOd, allocatedAccessPoint.length, 
         		allocatedAccessPoint, remotejobscontact.length, remotejobscontact);
-        jobManager.exit();
+		// this method does nothing atm
+        //jobManager.exit();
         if (createdCode != 0) {
         	switch (createdCode) {
         		case POPErrorCode.POP_EXEC_FAIL:
