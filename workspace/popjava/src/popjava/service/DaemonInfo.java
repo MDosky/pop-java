@@ -54,6 +54,6 @@ public class DaemonInfo {
 
 	@Override
 	public String toString() {
-		return String.format("%s@%s:%s", password.substring(5), hostname, port);
+		return String.format("%s@%s:%s", password, hostname, port);
 	}
 }
