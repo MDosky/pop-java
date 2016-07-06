@@ -684,6 +684,7 @@ public class ObjectDescription implements IPOPBase {
 //				+ Float.toString(wallTime) + "encoding=" + encoding
 //				+ "protocol=" + protocol + "platform=" + platform + "hostName="
 //				+ hostName + "jobUrl=" + jobUrl + "codeFile=" + codeFile;
-		return "od";
+//		return "od";
+		return String.format("OD[P:%s, H:%s, J:%s, S:%s]", protocol, hostName, jobUrl, connectionSecret);
 	}
 }

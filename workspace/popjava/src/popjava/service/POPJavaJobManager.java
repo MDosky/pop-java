@@ -70,10 +70,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		ObjectDescriptionInput od,
 		int howmany, final @POPParameter(POPParameter.Direction.INOUT) POPAccessPoint[] objcontacts,
 		int howmany2, final @POPParameter(POPParameter.Direction.INOUT) POPAccessPoint[] remotejobcontacts) {
-		
-		System.out.println(String.format("%s %s %s %s %s %s %s", localservice, objname, od, howmany, 
-		objcontacts, howmany2, remotejobcontacts));
-		
+				
 		// skip if it's not a request
 		if (howmany <= 0) {
 			return 0;
@@ -102,6 +99,8 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			LogWriter.writeDebugInfo(String.format("Exception in JogMgr::CreateObject: %s", e.getMessage()));
 			return POPErrorCode.POP_JOBSERVICE_FAIL;
 		}
+		
+		System.out.println("PUT AP: " + Arrays.toString(objcontacts));
 
 		return 0;
 	}
@@ -273,6 +272,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			hostname = "localhost";
 		}
 
+		System.out.println(nod);
 		switch (nod.getConnectionType()) {
 			case ANY:
 			case SSH:

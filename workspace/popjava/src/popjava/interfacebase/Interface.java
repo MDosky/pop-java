@@ -8,6 +8,7 @@ package popjava.interfacebase;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import popjava.PopJava;
@@ -241,10 +242,9 @@ public class Interface {
         
         ObjectDescriptionInput constOd = new ObjectDescriptionInput(od);
         
-		System.out.println(String.format("%s %s %s %s %s %s %s", POPSystem.appServiceAccessPoint, objectName, constOd, allocatedAccessPoint.length, 
-        		allocatedAccessPoint, remotejobscontact.length, remotejobscontact));
         int createdCode = jobManager.createObject(POPSystem.appServiceAccessPoint, objectName, constOd, allocatedAccessPoint.length, 
         		allocatedAccessPoint, remotejobscontact.length, remotejobscontact);
+		System.out.println("GET AP: " + Arrays.toString(allocatedAccessPoint));
 		jobManager.exit();
         if (createdCode != 0) {
         	switch (createdCode) {
