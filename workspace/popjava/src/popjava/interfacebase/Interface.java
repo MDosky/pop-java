@@ -16,6 +16,7 @@ import popjava.base.BindStatus;
 import popjava.base.MessageHeader;
 import popjava.base.POPErrorCode;
 import popjava.base.POPException;
+import popjava.base.POPObject;
 import popjava.base.Semantic;
 import popjava.baseobject.ObjectDescription;
 import popjava.baseobject.POPAccessPoint;
@@ -248,8 +249,7 @@ public class Interface {
 		System.out.println("Creating");
         int createdCode = jobManager.createObject(POPSystem.appServiceAccessPoint, objectName, constOd, allocatedAccessPoint.length, 
         		allocatedAccessPoint, remotejobscontact.length, remotejobscontact);
-		// this method does nothing atm
-        //jobManager.exit();
+		((POPObject) jobManager).exit();
         if (createdCode != 0) {
         	switch (createdCode) {
         		case POPErrorCode.POP_EXEC_FAIL:
