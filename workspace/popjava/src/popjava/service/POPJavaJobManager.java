@@ -5,12 +5,10 @@ import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import popjava.annotation.POPClass;
-import popjava.annotation.POPConfig;
 import popjava.annotation.POPObjectDescription;
 import popjava.annotation.POPParameter;
 import popjava.annotation.POPSyncConc;
@@ -74,6 +72,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		}
 		
 		System.out.println("Request received");
+		System.out.println("My Daemons: " + Arrays.toString(daemons.toArray()));
 
 		objcontacts = new POPAccessPoint[n];
 		POPAccessPoint pap;

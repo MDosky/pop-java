@@ -51,4 +51,9 @@ public class DaemonInfo {
     public void setId(long name) {
         this.id = name;
     }
+
+	@Override
+	public String toString() {
+		return String.format("%s@%s:%s", password.substring(5), hostname, port);
+	}
 }
