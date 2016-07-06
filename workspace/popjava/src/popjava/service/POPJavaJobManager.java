@@ -215,10 +215,6 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		String classname, String rport, POPAccessPoint jobserv,
 		POPAccessPoint appserv, POPAccessPoint objaccess) {
 
-		boolean isLocal = Util.isLocal(hostname);
-		/*if (!isLocal) {
-			return -1;
-		}*/
 		if (codeFile == null || codeFile.length() == 0) {
 			return -1;
 		}
@@ -277,34 +273,28 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			hostname = "localhost";
 		}
 
-		if (isLocal) {
-			System.out.println("Running Local");
-			ret = SystemUtil.runCmd(argvList);
-		} else {
-			System.out.println("Running Remote");
-			switch (nod.getConnectionType()) {
-				case ANY:
-				case SSH:
-					ret = SystemUtil.runRemoteCmd(hostname, argvList);
-					break;
-				case DEAMON:
-					POPJavaDeamonConnector connector;
-					try {
-						if (rport == null || rport.isEmpty()) {
-							connector = new POPJavaDeamonConnector(hostname);
-						} else {
-							int port = Integer.parseInt(rport);
-							connector = new POPJavaDeamonConnector(hostname, port);
-						}
-						if (connector.sendCommand(nod.getConnectionSecret(), argvList)) {
-							ret = 0;
-						}
-					} catch (UnknownHostException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
+		switch (nod.getConnectionType()) {
+			case ANY:
+			case SSH:
+				ret = SystemUtil.runRemoteCmd(hostname, argvList);
+				break;
+			case DEAMON:
+				POPJavaDeamonConnector connector;
+				try {
+					if (rport == null || rport.isEmpty()) {
+						connector = new POPJavaDeamonConnector(hostname);
+					} else {
+						int port = Integer.parseInt(rport);
+						connector = new POPJavaDeamonConnector(hostname, port);
 					}
-			}
+					if (connector.sendCommand(nod.getConnectionSecret(), argvList)) {
+						ret = 0;
+					}
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		}
 
 		if (ret == -1) {
