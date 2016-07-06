@@ -49,7 +49,7 @@ public class JavaJobManagerMain implements Runnable {
 
 		System.out.println("Thread started");
 
-		pap = new POPAccessPoint(String.format("%s://%s:%d", ComboxSocketFactory.PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT));
+		pap = new POPAccessPoint(String.format("%s://%s:%d", AccessPoint.SOCKET_PROTOCOL, AccessPoint.DEFAULT_HOST, POPJobManager.DEFAULT_PORT));
 
 		System.out.println("AP Created");
 		
