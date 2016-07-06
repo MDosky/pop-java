@@ -2,6 +2,8 @@ package popjava.service;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import popjava.PopJava;
 import popjava.baseobject.AccessPoint;
 import popjava.baseobject.POPAccessPoint;
@@ -47,8 +49,14 @@ public class JavaJobManagerMain implements Runnable {
 		System.out.println("AP Created");
 
 		POPJavaJobManager jobM;
-		jobM = PopJava.newActive(POPJavaJobManager.class, pap);
+		jobM = PopJava.newActive(POPJavaJobManager.class);
 
+		try {
+			Thread.sleep(15000);
+		} catch (InterruptedException ex) {
+			Logger.getLogger(JavaJobManagerMain.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		
 		POPSystem.end();
 	}
 
