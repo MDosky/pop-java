@@ -12,7 +12,7 @@ import popjava.service.JobManagerService;
  * This class declares the necessary methods to use the JobMgr parallel object of POP-C++
  */
 @POPClass(classId = 10, className = "JobCoreService", deconstructor = true)
-public class POPJobService extends POPServiceBase {
+public class POPJobService extends POPServiceBase implements JobManagerService {
 	
 	/**
 	 * Default constructor of POPJobService.
@@ -43,6 +43,14 @@ public class POPJobService extends POPServiceBase {
 	@POPSyncConc(id = 12)
 	public int createObject(POPAccessPoint localservice, String objname,
 			ObjectDescriptionInput od, int howmany, POPAccessPoint[] objcontacts, int howmany2, POPAccessPoint[] remotejobcontacts) {
+		System.out.println(this.getClassName());
+		System.out.println(localservice);
+		System.out.println(objname);
+		System.out.println(od);
+		System.out.println(howmany);
+		System.out.println(Arrays.toString(objcontacts));
+		System.out.println(howmany2);
+		System.out.println(remotejobcontacts);
 		return 0;
 	}
 
