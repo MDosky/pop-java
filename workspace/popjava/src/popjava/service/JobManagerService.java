@@ -11,4 +11,6 @@ public interface JobManagerService {
 
 	int createObject(POPAccessPoint localservice, String objname,
 		ObjectDescriptionInput od, int howmany, POPAccessPoint[] objcontacts, int howmany2, POPAccessPoint[] remotejobcontacts);
+	
+	void exit();
 }

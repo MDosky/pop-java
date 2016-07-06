@@ -24,7 +24,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
     }
 
     @Override
-    @POPSyncConc
+    @POPSyncConc(id = 12)
     public int createObject(POPAccessPoint localservice, String objname,
             ObjectDescriptionInput od, int howmany, POPAccessPoint[] objcontacts, int howmany2, POPAccessPoint[] remotejobcontacts) {
         System.out.println(localservice);
