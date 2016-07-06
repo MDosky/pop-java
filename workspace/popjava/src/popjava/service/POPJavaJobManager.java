@@ -72,7 +72,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		}
 		
 		System.out.println("Request received");
-		System.out.println("My Daemons: " + Arrays.toString(daemons.toArray()));
+		//System.out.println("My Daemons: " + Arrays.toString(daemons.toArray()));
 
 		objcontacts = new POPAccessPoint[n];
 		POPAccessPoint pap;
