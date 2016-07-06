@@ -13,7 +13,7 @@ import popjava.dataswaper.ObjectDescriptionInput;
  * @author Dosky
  */
 @POPClass(classId = 99924, deconstructor = false, isDistributable = true)
-public class POPJavaJobManager implements JobManagerService {
+public class POPJavaJobManager extends POPObject implements JobManagerService {
 
     @POPObjectDescription(url = "localhost:2711")
     public POPJavaJobManager() {
