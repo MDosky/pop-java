@@ -2,7 +2,9 @@ package popjava.service;
 
 import java.util.Arrays;
 import popjava.annotation.POPClass;
+import popjava.annotation.POPConfig;
 import popjava.annotation.POPObjectDescription;
+import popjava.annotation.POPParameter;
 import popjava.annotation.POPSyncConc;
 import popjava.base.POPObject;
 import popjava.baseobject.POPAccessPoint;
@@ -26,7 +28,9 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
     @Override
     @POPSyncConc(id = 12)
     public int createObject(POPAccessPoint localservice, String objname,
-            ObjectDescriptionInput od, int howmany, POPAccessPoint[] objcontacts, int howmany2, POPAccessPoint[] remotejobcontacts) {
+            ObjectDescriptionInput od, 
+			int howmany, @POPParameter(POPParameter.Direction.OUT) POPAccessPoint[] objcontacts, 
+			int howmany2, @POPParameter(POPParameter.Direction.OUT) POPAccessPoint[] remotejobcontacts) {
         System.out.println(localservice);
         System.out.println(objname);
         System.out.println(od);
