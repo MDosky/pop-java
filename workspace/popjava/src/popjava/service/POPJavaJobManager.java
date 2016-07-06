@@ -63,10 +63,10 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	@POPSyncConc(id = 12)
 	public int createObject(POPAccessPoint localservice, String objname,
 		ObjectDescriptionInput od,
-		int howmany, @POPParameter(POPParameter.Direction.OUT) POPAccessPoint[] objcontacts,
-		int howmany2, @POPParameter(POPParameter.Direction.OUT) POPAccessPoint[] remotejobcontacts) {
+		int howmany, POPAccessPoint[] objcontacts,
+		int howmany2, POPAccessPoint[] remotejobcontacts) {
 		
-		System.out.println(String.format("%s %s %s %s %s %s %s\n", localservice, objname, od, howmany, 
+		System.out.println(String.format("%s %s %s %s %s %s %s", localservice, objname, od, howmany, 
 		objcontacts, howmany2, remotejobcontacts));
 		
 		// skip if it's not a request
