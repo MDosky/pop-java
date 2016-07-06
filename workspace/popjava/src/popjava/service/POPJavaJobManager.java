@@ -284,8 +284,10 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		}
 
 		if (isLocal) {
+			System.out.println("Running Local");
 			ret = SystemUtil.runCmd(argvList);
 		} else {
+			System.out.println("Running Remote");
 			switch (nod.getConnectionType()) {
 				case ANY:
 				case SSH:
