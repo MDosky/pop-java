@@ -3,7 +3,7 @@ package popjava.service;
 import java.util.Arrays;
 import popjava.annotation.POPClass;
 import popjava.annotation.POPObjectDescription;
-import popjava.annotation.POPSyncMutex;
+import popjava.annotation.POPSyncConc;
 import popjava.base.POPObject;
 import popjava.baseobject.POPAccessPoint;
 import popjava.dataswaper.ObjectDescriptionInput;
@@ -24,7 +24,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
     }
 
     @Override
-    @POPSyncMutex
+    @POPSyncConc
     public int createObject(POPAccessPoint localservice, String objname,
             ObjectDescriptionInput od, int howmany, POPAccessPoint[] objcontacts, int howmany2, POPAccessPoint[] remotejobcontacts) {
         System.out.println(localservice);
