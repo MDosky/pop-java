@@ -10,12 +10,13 @@ import popjava.annotation.POPSyncSeq;
 import popjava.baseobject.POPAccessPoint;
 import popjava.dataswaper.ObjectDescriptionInput;
 import popjava.dataswaper.POPString;
+import popjava.service.JobManagerService;
 /**
  * Partial POP-Java class implementation to be used with the POP-C++ runtime
  * This class declares the necessary methods to use the JobMgr parallel object of POP-C++
  */
 @POPClass(classId = 15, className = "JobMgr", deconstructor = true)
-public class POPJobManager extends POPJobService {
+public class POPJobManager extends POPJobService implements JobManagerService {
 
 	/**
 	 * Default running port of the JobMgr service
