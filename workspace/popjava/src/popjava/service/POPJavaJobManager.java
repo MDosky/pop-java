@@ -34,6 +34,12 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
         System.out.println(Arrays.toString(objcontacts));
         System.out.println(howmany2);
         System.out.println(remotejobcontacts);
+		
+		for(int i = 0; i < howmany; i++)
+			objcontacts[i] = new POPAccessPoint();
+		
+		for(int i = 0; i < howmany2; i++)
+			remotejobcontacts[i] = new POPAccessPoint();
         return 0;
     }
 }
