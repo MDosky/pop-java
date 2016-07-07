@@ -61,15 +61,9 @@ public class ComboxServerSocket extends ComboxServer {
 				@Override
 				public void run() {
 					try {
-						if(accessPoint.getPort() == 2711) {
-							long a = 0;
-							while(true) {
-								System.out.print(a++);
-								System.out.print(serverCombox.getStatus());
-								System.out.print(" - ");
-								System.out.println(serverSocket.isClosed());
-							}
-						}
+						if(accessPoint.getPort() == 2711)
+							while(true)
+								System.out.println(serverCombox.getStatus() + " " + serverSocket.isClosed());
 					} catch(Exception e) {
 						System.out.println("Block.");
 						e.printStackTrace();
