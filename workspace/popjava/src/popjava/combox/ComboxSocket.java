@@ -48,7 +48,6 @@ public class ComboxSocket extends Combox {
 
 	@Override
 	protected void finalize() throws Throwable {
-System.out.println("finalize ComboxSocket " + this);
 		try {
 			close();
 		} finally {
