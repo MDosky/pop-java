@@ -59,7 +59,8 @@ public class ComboxServerSocket extends ComboxServer {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					System.out.println(serverCombox.getStatus() + " " + serverSocket.isClosed());
+					while(true)
+						System.out.println(serverCombox.getStatus() + " " + serverSocket.isClosed());
 				}
 			}).start();
 			accessPoint.setProtocol(ComboxSocketFactory.PROTOCOL);
