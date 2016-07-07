@@ -60,15 +60,21 @@ public class ComboxServerSocket extends ComboxServer {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					if(accessPoint.getPort() == 2711)
-						while(true)
-							System.out.println(serverCombox.getStatus() + " " + serverSocket.isClosed());
+					try {
+						if(accessPoint.getPort() == 2711)
+							while(true)
+								System.out.println(serverCombox.getStatus() + " " + serverSocket.isClosed());
+					} catch(Exception e) {
+						System.out.println("Block.");
+						e.printStackTrace();
+					}
 				}
 			}).start();
 			accessPoint.setProtocol(ComboxSocketFactory.PROTOCOL);
 			accessPoint.setHost(POPSystem.getHostIP());
 			accessPoint.setPort(serverSocket.getLocalPort());
 		} catch (IOException e) {
+			System.out.println("IO Ex");
 		}
 	}
 }
