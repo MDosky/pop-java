@@ -309,9 +309,6 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			int status = buffer.getInt();
 			String str = buffer.getString();
 
-			System.out.println(status);
-			System.out.println(str);
-			
 			if (status == 0) {
 				objaccess.setAccessString(str);
 			} else {
