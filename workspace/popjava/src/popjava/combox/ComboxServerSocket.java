@@ -46,7 +46,6 @@ public class ComboxServerSocket extends ComboxServer {
 	 * Create and start the combox server
 	 */
 	public void createServer() {
-		System.out.println("createServer " + accessPoint.getPort());
 		try {
 			serverSocket = new ServerSocket();
             serverSocket.setReceiveBufferSize(RECEIVE_BUFFER_SIZE);
@@ -57,13 +56,13 @@ public class ComboxServerSocket extends ComboxServer {
 			Thread thread = new Thread(serverCombox, "Server combox acception thread");
 			thread.start();
 			
-//			new Thread(new Runnable() {
-//				@Override
-//				public void run() {
-//					while(true)
-//						System.out.println(serverCombox.getStatus() + " " + serverSocket.isClosed());
-//				}
-//			}).start();
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					while(true)
+						System.out.println(serverCombox.getStatus() + " " + serverSocket.isClosed());
+				}
+			}).start();
 			accessPoint.setProtocol(ComboxSocketFactory.PROTOCOL);
 			accessPoint.setHost(POPSystem.getHostIP());
 			accessPoint.setPort(serverSocket.getLocalPort());
