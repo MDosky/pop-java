@@ -61,10 +61,4 @@ public class ComboxServerSocket extends ComboxServer {
 		} catch (IOException e) {
 		}
 	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		System.out.println("Finalize Server");
-		super.finalize(); //To change body of generated methods, choose Tools | Templates.
-	}
 }
