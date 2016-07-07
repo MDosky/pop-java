@@ -59,11 +59,14 @@ public class ComboxAllocateSocket {
 	 * Close the current connection
 	 */
 	public void close() {
+		System.out.println("Closing connection.");
 		try {
 			if(combox != null){
+		System.out.println("close " + combox);
 				combox.close();
 			}
 			if (serverSocket != null && !serverSocket.isClosed()) {
+		System.out.println("close " + serverSocket);
 				serverSocket.close();
 			}
 
@@ -77,6 +80,7 @@ public class ComboxAllocateSocket {
 	 * @return	Number of byte sent
 	 */
 	public int send(POPBuffer buffer) {
+		System.out.println("send " + buffer);
 		return combox.send(buffer);
 	}
 
@@ -86,6 +90,7 @@ public class ComboxAllocateSocket {
 	 * @return	Number of byte read
 	 */
 	public int receive(POPBuffer buffer) {
+		System.out.println("receive " + buffer);
 		return combox.receive(buffer, -1);
 	}
 	
