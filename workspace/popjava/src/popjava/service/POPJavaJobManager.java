@@ -71,6 +71,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		int howmany, final @POPParameter(POPParameter.Direction.INOUT) POPAccessPoint[] objcontacts,
 		int howmany2, final @POPParameter(POPParameter.Direction.INOUT) POPAccessPoint[] remotejobcontacts) {
 				
+		System.out.println(howmany);
 		// skip if it's not a request
 		if (howmany <= 0) {
 			return 0;
@@ -266,7 +267,6 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			hostname = "localhost";
 		}
 
-		System.out.println(nod);
 		switch (nod.getConnectionType()) {
 			case ANY:
 			case SSH:
