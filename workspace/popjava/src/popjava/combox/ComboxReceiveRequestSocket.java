@@ -126,7 +126,6 @@ public class ComboxReceiveRequestSocket implements Runnable {
 	 * Method called before destruction of the instance
 	 */
 	protected void finalize() throws Throwable {
-System.out.println("finalize Request Socket");
 		try {
 			close();
 		} finally {
