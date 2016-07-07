@@ -56,8 +56,11 @@ public class ComboxServerSocket extends ComboxServer {
 			Thread thread = new Thread(serverCombox, "Server combox acception thread");
 			thread.start();
 			
-			new Thread(() -> {
-				System.out.println(serverCombox.getStatus() + " " + serverSocket.isClosed());
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					System.out.println(serverCombox.getStatus() + " " + serverSocket.isClosed());
+				}
 			}).start();
 			accessPoint.setProtocol(ComboxSocketFactory.PROTOCOL);
 			accessPoint.setHost(POPSystem.getHostIP());
