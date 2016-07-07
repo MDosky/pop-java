@@ -52,12 +52,9 @@ public class ComboxAcceptSocket implements Runnable {
 				if(broker != null){
 					broker.onNewConnection();
 				}
-				System.out.println("   before sync");
 				synchronized (concurentConnections) {
-					System.out.println("      in sync");
 					concurentConnections.add(connection);
 				}
-				System.out.println("    after sync");
 
 				Runnable runnable = new ComboxReceiveRequestSocket(broker, requestQueue, connection);
 				Thread thread = new Thread(runnable, "Combox request acceptance");
