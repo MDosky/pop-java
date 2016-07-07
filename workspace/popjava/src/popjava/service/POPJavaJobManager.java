@@ -224,12 +224,6 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		ArrayList<String> codeList = Util.splitTheCommand(codeFile);
 		argvList.addAll(codeList);
 
-		/*if(nod.getMemoryMin() >  0){
-			argvList.add(1, "-Xms"+nod.getMemoryMin()+"m");
-		}
-		if(nod.getMemoryReq() >  0){
-			argvList.add(1, "-Xmx"+nod.getMemoryReq()+"m");
-		}*/
 		if (codeFile.startsWith("java") && Configuration.ACTIVATE_JMX) {
 			argvList.add(1, "-Dcom.sun.management.jmxremote.port=" + (int) (Math.random() * 1000 + 3000));
 			argvList.add(1, "-Dcom.sun.management.jmxremote.ssl=false");
@@ -260,10 +254,10 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			argvList.add(jobString);
 		}
 
-		if (rport != null && rport.length() > 0) {
-			String portString = String.format("-socket_port=%s", rport);
-			argvList.add(portString);
-		}
+//		if (rport != null && rport.length() > 0) {
+//			String portString = String.format("-socket_port=%s", rport);
+//			argvList.add(portString);
+//		}
 
 		int ret = -1;
 
@@ -315,6 +309,9 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			int status = buffer.getInt();
 			String str = buffer.getString();
 
+			System.out.println(status);
+			System.out.println(str);
+			
 			if (status == 0) {
 				objaccess.setAccessString(str);
 			} else {
