@@ -54,13 +54,9 @@ public class ComboxAcceptSocket implements Runnable {
 					concurentConnections.add(connection);
 				}
 
-				System.out.println("  create runnable");
 				Runnable runnable = new ComboxReceiveRequestSocket(broker, requestQueue, connection);
-				System.out.println("  runnable created, creating thread");
 				Thread thread = new Thread(runnable, "Combox request acceptance");
-				System.out.println("  created");
 				thread.start();
-				System.out.println("  started");
 			} catch (IOException e) {				
 				break;
 			}
