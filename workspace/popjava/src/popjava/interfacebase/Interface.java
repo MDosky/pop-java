@@ -17,7 +17,6 @@ import popjava.base.BindStatus;
 import popjava.base.MessageHeader;
 import popjava.base.POPErrorCode;
 import popjava.base.POPException;
-import popjava.base.POPObject;
 import popjava.base.Semantic;
 import popjava.baseobject.ObjectDescription;
 import popjava.baseobject.POPAccessPoint;
@@ -33,9 +32,9 @@ import popjava.combox.ComboxAllocateSocket;
 import popjava.combox.ComboxFactoryFinder;
 import popjava.dataswaper.ObjectDescriptionInput;
 import popjava.dataswaper.POPString;
-import popjava.service.JobManagerService;
+import popjava.jobmanager.JobManagerService;
 import popjava.service.POPJavaDeamonConnector;
-import popjava.service.POPJavaJobManager;
+import popjava.jobmanager.POPJavaJobManager;
 import popjava.serviceadapter.POPAppService;
 import popjava.serviceadapter.POPJobManager;
 import popjava.serviceadapter.POPJobService;
@@ -702,12 +701,7 @@ public class Interface {
 			case DEAMON:
 				POPJavaDeamonConnector connector;
 				try {
-					if(rport == null || rport.isEmpty()) {
-						connector = new POPJavaDeamonConnector(hostname);
-					} else {
-						int port = Integer.parseInt(rport);
-						connector = new POPJavaDeamonConnector(hostname, port);
-					}
+					connector = new POPJavaDeamonConnector(hostname);
 					if(connector.sendCommand(od.getConnectionSecret(), argvList)){
 						ret = 0;
 					}

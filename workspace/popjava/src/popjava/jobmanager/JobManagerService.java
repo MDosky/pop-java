@@ -1,4 +1,4 @@
-package popjava.service;
+package popjava.jobmanager;
 
 import popjava.baseobject.POPAccessPoint;
 import popjava.dataswaper.ObjectDescriptionInput;

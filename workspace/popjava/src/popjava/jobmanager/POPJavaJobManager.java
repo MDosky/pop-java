@@ -1,13 +1,12 @@
-package popjava.service;
+package popjava.jobmanager;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+import popjava.PopJava;
 import popjava.annotation.POPClass;
 import popjava.annotation.POPObjectDescription;
 import popjava.annotation.POPParameter;
@@ -24,6 +23,9 @@ import popjava.codemanager.AppService;
 import popjava.codemanager.POPJavaAppService;
 import popjava.combox.ComboxAllocateSocket;
 import popjava.dataswaper.ObjectDescriptionInput;
+import popjava.service.DaemonInfo;
+import popjava.service.POPJavaDeamon;
+import popjava.service.POPJavaDeamonConnector;
 import static popjava.interfacebase.Interface.getAppcoreService;
 import static popjava.interfacebase.Interface.getCodeFile;
 import popjava.serviceadapter.POPAppService;
@@ -35,8 +37,8 @@ import popjava.util.SystemUtil;
 import popjava.util.Util;
 
 /**
- *
- * @author Dosky
+ * Start a centralized JobManager which use the POPJavaDeamon class to create
+ * remote objects.
  */
 @POPClass(classId = 99924, deconstructor = false, isDistributable = true)
 public class POPJavaJobManager extends POPObject implements JobManagerService {
@@ -46,6 +48,21 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 	private ObjectDescription nod;
 	private int current = 0;
+	
+	/**
+	 * Instantiate a new JM
+	 * @param args Every argument is a Daemon's description {password}@{hostname}:{port}
+	 */
+	public static void main(String[] args) {
+		args = POPSystem.initialize(args);
+
+		// get list of daemons in arguments
+		List<DaemonInfo> daemons = DaemonInfo.parse(args);
+		
+		System.out.println("[JM] Initilizing");
+		PopJava.newActive(POPJavaJobManager.class, daemons);
+		System.out.println("[JM] Initialized");
+	}
 
 	@POPObjectDescription(url = "localhost:2711")
 	public POPJavaJobManager() {
@@ -58,6 +75,11 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		this.size = daemons.size();
 	}
 	
+	/**
+	 * Return the next host to use.
+	 * Right now it's a Round-robin but in future it could change
+	 * @return 
+	 */
 	private int getNextHost() {
 		int c = current;
 		current = (current + 1) % size; 
@@ -87,8 +109,8 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 				nod = POPSystem.getDefaultOD();
 				// set daemon infromations
 				nod.setHostname(objname);
-				nod.setHostname(String.format("%s:%d", di.hostname, di.port));
-				nod.setConnectionSecret(di.password);
+				nod.setHostname(String.format("%s:%d", di.getHostname(), di.getPort()));
+				nod.setConnectionSecret(di.getPassword());
 				nod.setConnectionType(ConnectionType.DEAMON);
 				// out access point
 				pap = new POPAccessPoint();
@@ -157,7 +179,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		}
 
 		int status = localExec(joburl, codeFile, objectName, rport,
-			POPSystem.jobService, POPSystem.appServiceAccessPoint, accesspoint);
+			POPSystem.appServiceAccessPoint, accesspoint);
 
 		if (status != 0) {
 			// Throw exception
@@ -212,7 +234,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * @return -1 if the local execution failed
 	 */
 	private int localExec(String hostname, String codeFile,
-		String classname, String rport, POPAccessPoint jobserv,
+		String classname, String rport,
 		POPAccessPoint appserv, POPAccessPoint objaccess) {
 
 		if (codeFile == null || codeFile.length() == 0) {
@@ -250,37 +272,28 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			String appString = String.format(Broker.APPSERVICE_PREFIX + "%s", appserv.toString());
 			argvList.add(appString);
 		}
-		if (jobserv != null && !jobserv.isEmpty()) {
-			String jobString = String.format("-jobservice=%s", jobserv.toString());
-			argvList.add(jobString);
-		}
-
-//		if (rport != null && rport.length() > 0) {
-//			String portString = String.format("-socket_port=%s", rport);
-//			argvList.add(portString);
-//		}
+		// always use this job manager for every object
+		String jobString = String.format("-jobservice=%s", getAccessPoint().toString());
+		argvList.add(jobString);
 
 		int ret = -1;
-
-		//Allow local objects to be declared as remote to test remote object creation locally
-		if (hostname.equals(POPObjectDescription.LOCAL_DEBUG_URL)) {
-			hostname = "localhost";
-		}
 
 		switch (nod.getConnectionType()) {
 			case ANY:
 			case SSH:
+				// let it choose the port only with SSH
+				if (rport != null && rport.length() > 0) {
+					String portString = String.format("-socket_port=%s", rport);
+					argvList.add(portString);
+				}
 				ret = SystemUtil.runRemoteCmd(hostname, argvList);
 				break;
 			case DEAMON:
 				POPJavaDeamonConnector connector;
 				try {
-					if (rport == null || rport.isEmpty()) {
-						connector = new POPJavaDeamonConnector(hostname);
-					} else {
-						int port = Integer.parseInt(rport);
-						connector = new POPJavaDeamonConnector(hostname, port);
-					}
+					// the port in this case is the daemon's not the one we want
+					int port = Integer.parseInt(rport);
+					connector = new POPJavaDeamonConnector(hostname, port);
 					if (connector.sendCommand(nod.getConnectionSecret(), argvList)) {
 						ret = 0;
 					}
