@@ -64,6 +64,7 @@ public class ComboxAllocateSocket {
 				combox.close();
 			}
 			if (serverSocket != null && !serverSocket.isClosed()) {
+System.out.println("close Allocate " + serverSocket);
 				serverSocket.close();
 			}
 

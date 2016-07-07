@@ -60,7 +60,6 @@ public class ComboxServerSocket extends ComboxServer {
 			accessPoint.setPort(serverSocket.getLocalPort());
 			
 			System.out.println("createServer " + serverSocket);
-			System.out.println("createServer " + accessPoint);
 		} catch (IOException e) {
 			System.out.println("createServer IO Ex");
 		}
