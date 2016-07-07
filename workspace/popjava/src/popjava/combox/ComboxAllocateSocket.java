@@ -29,6 +29,7 @@ public class ComboxAllocateSocket {
 			serverSocket = new ServerSocket();
 			serverSocket.bind(sockAddr);
 			serverSocket.setSoTimeout(SOCKET_TIMEOUT_MS);
+		System.out.println("ComboxAllocateSocket " + serverSocket);
 		} catch (IOException e) {
 		    e.printStackTrace();
 		}
@@ -41,6 +42,7 @@ public class ComboxAllocateSocket {
 		try {
 			Socket peerConnection = serverSocket.accept();
 			combox = new ComboxSocket(peerConnection);
+		System.out.println("startToAcceptOneConnection " + combox + " " + peerConnection);
 		} catch (IOException e) {
 			LogWriter.writeExceptionLog(e);
 		}
