@@ -38,7 +38,9 @@ public class ComboxReceiveRequestSocket implements Runnable {
 		this.broker = broker;
 		this.requestQueue = requestQueue;
 		combox = new ComboxSocket(socket);		
+		s = socket;
 	}
+	private Socket s;
 
 	/**
 	 * Start the thread 
@@ -50,7 +52,7 @@ public class ComboxReceiveRequestSocket implements Runnable {
 			try {
 				if (!receiveRequest(popRequest)) {
 					System.out.println("received exit status " + popRequest);
-					System.out.println("  "  + combox);
+					System.out.println("  "  + s);
 					setStatus(EXIT);
 					break;
 				}
