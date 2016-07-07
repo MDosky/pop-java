@@ -50,7 +50,8 @@ public class ComboxServerSocket extends ComboxServer {
 		try {
 			serverSocket = new ServerSocket();
             serverSocket.setReceiveBufferSize(RECEIVE_BUFFER_SIZE);
-			serverSocket.bind(new InetSocketAddress(accessPoint.getPort()));			
+			serverSocket.bind(new InetSocketAddress(accessPoint.getPort()));	
+			serverSocket.setReuseAddress(true);
 			serverCombox = new ComboxAcceptSocket(broker, requestQueue,
 					serverSocket);
 			serverCombox.setStatus(RUNNING);
@@ -62,12 +63,13 @@ public class ComboxServerSocket extends ComboxServer {
 				public void run() {
 					try {
 						if(accessPoint.getPort() == 2711) {
-							long a = 0;
+							long i = 0;
 							while(true) {
-								System.out.print(a++);
+								System.out.print(i++);
+								System.out.print(" - ");
 								System.out.print(serverCombox.getStatus());
 								System.out.print(" - ");
-								System.out.println(serverSocket.isClosed());
+								System.out.println(serverSocket.isBound());
 							}
 						}
 					} catch(Exception e) {
