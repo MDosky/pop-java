@@ -49,11 +49,10 @@ public class ComboxReceiveRequestSocket implements Runnable {
 			Request popRequest = new Request();
 			try {
 				if (!receiveRequest(popRequest)) {
-					System.out.println("received exit status " + new String(popRequest.getBuffer().array()));
+					System.out.println(combox.accessPoint + " \nreceived exit status " + new String(popRequest.getBuffer().array()));
 					setStatus(EXIT);
 					break;
 				}
-				System.out.println("received buffer " + new String(popRequest.getBuffer().array()));
 				
 				// add request to fifo list
 				if (broker != null && !broker.popCall(popRequest)) {
