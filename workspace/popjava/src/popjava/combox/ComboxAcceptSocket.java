@@ -41,12 +41,10 @@ public class ComboxAcceptSocket implements Runnable {
 	 * Start the local thread
 	 */
 	public void run() {
-		System.out.println("enter run");
 		while (status != EXIT) {
 			Socket connection = null;
 			try {
 				connection = serverSocket.accept();
-				System.out.println("accept " + connection);
 				System.out.println(String.format("%s %s %s", broker, requestQueue, serverSocket));
 				LogWriter.writeDebugInfo("Connection accepted "+connection.getLocalPort()+" local:"+connection.getPort());
 				if(broker != null){
@@ -56,16 +54,19 @@ public class ComboxAcceptSocket implements Runnable {
 					concurentConnections.add(connection);
 				}
 
+				System.out.println("  create runnable");
 				Runnable runnable = new ComboxReceiveRequestSocket(broker, requestQueue, connection);
+				System.out.println("  runnable created, creating thread");
 				Thread thread = new Thread(runnable, "Combox request acceptance");
+				System.out.println("  created");
 				thread.start();
+				System.out.println("  started");
 			} catch (IOException e) {				
 				break;
 			}
 		}
 		
 		LogWriter.writeDebugInfo("Combox Server finished");
-		System.out.println("closing run");
 		this.close();
 	}
 
@@ -81,7 +82,6 @@ public class ComboxAcceptSocket implements Runnable {
 			}
 		}
 		try {
-			System.out.println("closing socket " + serverSocket);
 			if (!serverSocket.isClosed()){
 				serverSocket.close();
 			}
