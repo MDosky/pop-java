@@ -58,10 +58,7 @@ public class ComboxServerSocket extends ComboxServer {
 			accessPoint.setProtocol(ComboxSocketFactory.PROTOCOL);
 			accessPoint.setHost(POPSystem.getHostIP());
 			accessPoint.setPort(serverSocket.getLocalPort());
-			
-			System.out.println("createServer " + serverSocket);
 		} catch (IOException e) {
-			System.out.println("createServer IO Ex");
 		}
 	}
 

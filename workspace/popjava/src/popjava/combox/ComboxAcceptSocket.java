@@ -46,7 +46,6 @@ public class ComboxAcceptSocket implements Runnable {
 			try {
 				connection = serverSocket.accept();
 				LogWriter.writeDebugInfo("Connection accepted "+connection.getLocalPort()+" local:"+connection.getPort());
-			System.out.println("run accepted" + connection);
 				if(broker != null){
 					broker.onNewConnection();
 				}
@@ -72,7 +71,6 @@ public class ComboxAcceptSocket implements Runnable {
 	public void close() {
 		for (Socket s : concurentConnections) {
 			try {
-			System.out.println("close " + s);
 				s.close();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -80,11 +78,9 @@ public class ComboxAcceptSocket implements Runnable {
 		}
 		try {
 			if (!serverSocket.isClosed()){
-			System.out.println("close " + serverSocket);
 				serverSocket.close();
 			}
 		} catch (IOException e) {			
-			System.out.println("close IO" + serverSocket);
 		}
 	}
 	
