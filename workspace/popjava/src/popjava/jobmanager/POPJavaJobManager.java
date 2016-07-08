@@ -42,7 +42,7 @@ import popjava.util.Util;
  * remote objects.
  */
 @POPClass(classId = 99924, deconstructor = false, isDistributable = true)
-public class POPJavaJobManager implements JobManagerService {
+public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 	private final List<DaemonInfo> daemons;
 	private final int size;
@@ -66,7 +66,7 @@ public class POPJavaJobManager implements JobManagerService {
 		POPJavaJobManager jm = PopJava.newActive(POPJavaJobManager.class, daemons.toArray(new DaemonInfo[0]));
 		System.out.println("[JM] Initialized");
 
-		final POPJavaJobManager thisJm = PopJava.getThis(jm);
+		final POPJavaJobManager thisJm = PopJava.newActive(POPJavaJobManager.class, jm.getAccessPoint());
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -361,7 +361,6 @@ public class POPJavaJobManager implements JobManagerService {
 
 	@Override
 	public void exit() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }
