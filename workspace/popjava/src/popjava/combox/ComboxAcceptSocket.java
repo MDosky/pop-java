@@ -45,7 +45,6 @@ public class ComboxAcceptSocket implements Runnable {
 			Socket connection = null;
 			try {
 				connection = serverSocket.accept();
-				System.out.println(String.format("%s %s %s", broker, requestQueue, serverSocket));
 				LogWriter.writeDebugInfo("Connection accepted "+connection.getLocalPort()+" local:"+connection.getPort());
 				if(broker != null){
 					broker.onNewConnection();
