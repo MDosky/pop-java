@@ -63,7 +63,7 @@ public class ComboxReceiveRequestSocket implements Runnable {
 				}
 			} catch (Exception e) {
 				LogWriter.writeExceptionLog(e);
-				setStatus(EXIT);
+				//setStatus(EXIT);
 			}
 		}
 		close();
