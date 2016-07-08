@@ -797,4 +797,18 @@ public class POPObject implements IPOPBase {
 		
 		return (T) me;
 	}
+	
+	public <T extends Object> T getThis(){
+		if(me == null){
+			me = PopJava.newActive(getClass(), getAccessPoint());
+			
+			//After establishing connection with self, artificially decrease connection by one
+			//This is to avoid the issue of never closing objects with reference to itself
+			if(me != null && Broker.getBroker() != null){
+				Broker.getBroker().onCloseConnection();
+			}
+		}
+		
+		return (T) me;
+	}
 }

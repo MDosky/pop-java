@@ -71,12 +71,13 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				POPJavaJobManager thisJm = PopJava.newActive(POPJavaJobManager.class, jm.getAccessPoint());
+				POPJavaJobManager thisJm = jm.getThis();
 				while (true) {
-					System.out.println(thisJm.getAlloInst());
+					System.out.println(thisJm.nop());
 					try {
-						Thread.sleep(10);
+						Thread.sleep(100);
 					} catch (InterruptedException ex) {
+						System.out.println("inter");
 					}
 				}
 			}
@@ -99,11 +100,6 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	@POPSyncSeq
 	public long nop() {
 		return nop++;
-	}
-	
-	@POPSyncSeq
-	public int getAlloInst() {
-		return refCount;
 	}
 
 	/**
