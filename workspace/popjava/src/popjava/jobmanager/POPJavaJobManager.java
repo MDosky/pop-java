@@ -71,7 +71,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				POPJavaJobManager thisJm = PopJava.newActive(POPJavaJobManager.class);
+				POPJavaJobManager thisJm = PopJava.newActive(POPJavaJobManager.class, jm.getAccessPoint());
 				POPJavaJobManager tempJm;
 				long n;
 				while (true) {
@@ -79,7 +79,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 					System.out.println(n);
 					
 					if(n % 100 == 0) {
-						tempJm = PopJava.newActive(POPJavaJobManager.class);
+						tempJm = PopJava.newActive(POPJavaJobManager.class, jm.getAccessPoint());
 						thisJm = tempJm;
 					}
 					try {
