@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 import popjava.PopJava;
 import popjava.annotation.POPClass;
 import popjava.annotation.POPObjectDescription;
@@ -67,33 +66,29 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		final POPJavaJobManager jm = PopJava.newActive(POPJavaJobManager.class, daemons.toArray(new DaemonInfo[0]));
 		System.out.println("[JM] Initialized");
 
-//		new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				POPJavaJobManager thisJm = PopJava.newActive(POPJavaJobManager.class, jm.getAccessPoint());
-//				POPJavaJobManager tempJm;
-//				long n;
-//				while (true) {
-//					n = thisJm.nop();
-//					System.out.println(n);
-//					
-////					if(n % 100 == 0) {
-////						tempJm = PopJava.newActive(POPJavaJobManager.class, jm.getAccessPoint());
-////						thisJm.exit();
-////						thisJm = tempJm;
-////					}
-//					try {
-//						Thread.sleep(100);
-//					} catch (InterruptedException ex) {
-//						System.out.println("inter");
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				POPJavaJobManager thisJm = PopJava.newActive(POPJavaJobManager.class, jm.getAccessPoint());
+				POPJavaJobManager tempJm;
+				long n;
+				while (true) {
+					n = thisJm.nop();
+					System.out.println(n);
+					
+//					if(n % 100 == 0) {
+//						tempJm = PopJava.newActive(POPJavaJobManager.class, jm.getAccessPoint());
+//						thisJm.exit();
+//						thisJm = tempJm;
 //					}
-//				}
-//			}
-//		}).start();
-
-		try {
-			new Semaphore(0).acquire();
-		} catch(InterruptedException e) { }
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException ex) {
+						System.out.println("inter");
+					}
+				}
+			}
+		}).start();
 	}
 
 	@POPObjectDescription(url = "localhost:2711")
