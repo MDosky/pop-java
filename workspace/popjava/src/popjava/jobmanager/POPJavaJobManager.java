@@ -72,8 +72,17 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			@Override
 			public void run() {
 				POPJavaJobManager thisJm = PopJava.newActive(POPJavaJobManager.class);
+				POPJavaJobManager tempJm;
+				long n;
 				while (true) {
-					System.out.println(thisJm.nop());
+					n = thisJm.nop();
+					System.out.println(n);
+					
+					if(n % 100 == 0) {
+						tempJm = PopJava.newActive(POPJavaJobManager.class);
+						thisJm.exit();
+						thisJm = tempJm;
+					}
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException ex) {
@@ -360,10 +369,6 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		}
 		allocateCombox.close();
 		return result;
-	}
-
-	@Override
-	public void exit() {
 	}
 
 }
