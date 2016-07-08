@@ -298,7 +298,7 @@ public class POPJavaJobManager implements JobManagerService {
 			argvList.add(appString);
 		}
 		// always use this job manager for every object
-		String jobString = String.format("-jobservice=%s", getAccessPoint().toString());
+		String jobString = String.format("-jobservice=%s", PopJava.getAccessPoint(this).toString());
 		argvList.add(jobString);
 
 		int ret = -1;
