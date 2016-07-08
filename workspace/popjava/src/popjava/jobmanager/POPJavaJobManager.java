@@ -42,7 +42,7 @@ import popjava.util.Util;
  * remote objects.
  */
 @POPClass(classId = 99924, deconstructor = false, isDistributable = true)
-public class POPJavaJobManager extends POPObject implements JobManagerService {
+public class POPJavaJobManager implements JobManagerService {
 
 	private final List<DaemonInfo> daemons;
 	private final int size;
@@ -357,6 +357,11 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		}
 		allocateCombox.close();
 		return result;
+	}
+
+	@Override
+	public void exit() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }
