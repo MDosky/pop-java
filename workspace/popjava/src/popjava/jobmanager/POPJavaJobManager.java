@@ -7,8 +7,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import popjava.PopJava;
-import popjava.annotation.POPAsyncConc;
-import popjava.annotation.POPAsyncSeq;
 import popjava.annotation.POPClass;
 import popjava.annotation.POPObjectDescription;
 import popjava.annotation.POPParameter;
@@ -60,6 +58,8 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 */
 	public static void main(String[] args) {
 		args = POPSystem.initialize(args);
+		
+		System.out.println(POPSystem.appServiceAccessPoint);
 
 		// get list of daemons in arguments
 		List<DaemonInfo> daemons = DaemonInfo.parse(args);
