@@ -92,14 +92,6 @@ public class POPJobManager extends POPJobService {
 	@POPSyncConc(id = 12)
 	public int createObject(POPAccessPoint localservice, POPString objname,
 			ObjectDescriptionInput od, int howmany, POPAccessPoint[] objcontacts, int howmany2, POPAccessPoint[] remotejobcontacts) {
-		System.out.println(this.getClassName());
-		System.out.println(localservice);
-		System.out.println(objname);
-		System.out.println(od);
-		System.out.println(howmany);
-		System.out.println(Arrays.toString(objcontacts));
-		System.out.println(howmany2);
-		System.out.println(remotejobcontacts);
 		return 0;
 	}
 
