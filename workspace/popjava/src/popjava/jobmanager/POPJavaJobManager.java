@@ -92,9 +92,9 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		this.size = daemons.length;
 	}
 
-	private long nop = 0;
+	private long nop = Long.MIN_VALUE;
 
-	@POPAsyncConc
+	@POPSyncConc
 	public long nop() {
 		return nop++;
 	}
