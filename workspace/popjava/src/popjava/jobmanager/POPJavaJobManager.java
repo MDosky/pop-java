@@ -66,7 +66,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		POPJavaJobManager jm = PopJava.newActive(POPJavaJobManager.class, daemons.toArray(new DaemonInfo[0]));
 		System.out.println("[JM] Initialized");
 
-		POPJavaJobManager thisJm = PopJava.getThis(jm);
+		final POPJavaJobManager thisJm = PopJava.getThis(jm);
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
