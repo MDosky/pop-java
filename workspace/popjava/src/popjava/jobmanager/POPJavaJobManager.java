@@ -59,7 +59,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * {password}@{hostname}:{port}
 	 */
 	public static void main(String[] args) {
-		POPSystem.setStarted();
+		args = POPSystem.initialize(args);
 
 		// get list of daemons in arguments
 		List<DaemonInfo> daemons = DaemonInfo.parse(args);
