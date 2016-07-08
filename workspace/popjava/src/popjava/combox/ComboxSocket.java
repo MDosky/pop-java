@@ -193,7 +193,7 @@ public class ComboxSocket extends Combox {
 						}
 					}else{
 						//System.out.println("RESET "+requestIdPacket+" "+requestId);
-						inputStream.reset();
+						//inputStream.reset();
 						//Thread.yield();
 					}
 				}
