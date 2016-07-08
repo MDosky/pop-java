@@ -80,7 +80,6 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 					
 					if(n % 100 == 0) {
 						tempJm = PopJava.newActive(POPJavaJobManager.class);
-						thisJm.exit();
 						thisJm = tempJm;
 					}
 					try {
