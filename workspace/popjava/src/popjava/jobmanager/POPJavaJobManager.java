@@ -49,33 +49,41 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 	private ObjectDescription nod;
 	private int current = 0;
-	
+
 	/**
 	 * Instantiate a new JM
-	 * @param args Every argument is a Daemon's description {password}@{hostname}:{port}
+	 *
+	 * @param args Every argument is a Daemon's description
+	 * {password}@{hostname}:{port}
 	 */
 	public static void main(String[] args) {
 		args = POPSystem.initialize(args);
 
 		// get list of daemons in arguments
 		List<DaemonInfo> daemons = DaemonInfo.parse(args);
-		
+
 		System.out.println("[JM] Initilizing");
 		POPJavaJobManager jm = PopJava.newActive(POPJavaJobManager.class, daemons.toArray(new DaemonInfo[0]));
 		System.out.println("[JM] Initialized");
-		
-		jm = PopJava.getThis(jm);
-		while(true) {
-			jm.nop();
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException ex) { }
-		}
+
+		POPJavaJobManager thisJm = PopJava.getThis(jm);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					thisJm.nop();
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException ex) {
+					}
+				}
+			}
+		}).start();
 	}
 
 	@POPObjectDescription(url = "localhost:2711")
 	public POPJavaJobManager() {
-		this(new DaemonInfo[] {new DaemonInfo("localhost", "", POPJavaDeamon.POP_JAVA_DEAMON_PORT, 0)});
+		this(new DaemonInfo[]{new DaemonInfo("localhost", "", POPJavaDeamon.POP_JAVA_DEAMON_PORT, 0)});
 	}
 
 	@POPObjectDescription(url = "localhost:2711")
@@ -83,21 +91,23 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		this.daemons = Collections.unmodifiableList(Arrays.asList(daemons));
 		this.size = daemons.length;
 	}
-	
+
 	long nop = Long.MIN_VALUE;
-	 @POPSyncSeq
+
+	@POPSyncSeq
 	public long nop() {
 		return nop++;
 	}
-	
+
 	/**
-	 * Return the next host to use.
-	 * Right now it's a Round-robin but in future it could change
-	 * @return 
+	 * Return the next host to use. Right now it's a Round-robin but in future
+	 * it could change
+	 *
+	 * @return
 	 */
 	private int getNextHost() {
 		int c = current;
-		current = (current + 1) % size; 
+		current = (current + 1) % size;
 		return c;
 	}
 
@@ -107,7 +117,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		ObjectDescriptionInput od,
 		int howmany, final @POPParameter(POPParameter.Direction.INOUT) POPAccessPoint[] objcontacts,
 		int howmany2, final @POPParameter(POPParameter.Direction.INOUT) POPAccessPoint[] remotejobcontacts) {
-				
+
 		System.out.println(howmany);
 		// skip if it's not a request
 		if (howmany <= 0) {
@@ -133,11 +143,11 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 				tryLocal(objname, pap);
 				objcontacts[i] = pap;
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			LogWriter.writeDebugInfo(String.format("Exception in JogMgr::CreateObject: %s", e.getMessage()));
 			return POPErrorCode.POP_JOBSERVICE_FAIL;
 		}
-		
+
 		System.out.println("PUT AP: " + Arrays.toString(objcontacts));
 
 		return 0;
