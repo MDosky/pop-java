@@ -11,6 +11,7 @@ import popjava.annotation.POPClass;
 import popjava.annotation.POPObjectDescription;
 import popjava.annotation.POPParameter;
 import popjava.annotation.POPSyncConc;
+import popjava.annotation.POPSyncSeq;
 import popjava.base.POPErrorCode;
 import popjava.base.POPException;
 import popjava.base.POPObject;
@@ -60,8 +61,16 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		List<DaemonInfo> daemons = DaemonInfo.parse(args);
 		
 		System.out.println("[JM] Initilizing");
-		PopJava.newActive(POPJavaJobManager.class, daemons.toArray(new DaemonInfo[0]));
+		POPJavaJobManager jm = PopJava.newActive(POPJavaJobManager.class, daemons.toArray(new DaemonInfo[0]));
 		System.out.println("[JM] Initialized");
+		
+		jm = PopJava.getThis(jm);
+		while(true) {
+			jm.nop();
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException ex) { }
+		}
 	}
 
 	@POPObjectDescription(url = "localhost:2711")
@@ -73,6 +82,12 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	public POPJavaJobManager(DaemonInfo[] daemons) {
 		this.daemons = Collections.unmodifiableList(Arrays.asList(daemons));
 		this.size = daemons.length;
+	}
+	
+	long nop = Long.MIN_VALUE;
+	 @POPSyncSeq
+	public long nop() {
+		return nop++;
 	}
 	
 	/**
