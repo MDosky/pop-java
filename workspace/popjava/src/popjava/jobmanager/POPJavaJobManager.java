@@ -8,10 +8,12 @@ import java.util.Collections;
 import java.util.List;
 import popjava.PopJava;
 import popjava.annotation.POPAsyncConc;
+import popjava.annotation.POPAsyncSeq;
 import popjava.annotation.POPClass;
 import popjava.annotation.POPObjectDescription;
 import popjava.annotation.POPParameter;
 import popjava.annotation.POPSyncConc;
+import popjava.annotation.POPSyncSeq;
 import popjava.base.POPErrorCode;
 import popjava.base.POPException;
 import popjava.base.POPObject;
@@ -94,7 +96,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 	private long nop = Long.MIN_VALUE;
 
-	@POPSyncConc
+	@POPSyncSeq
 	public long nop() {
 		return nop++;
 	}
