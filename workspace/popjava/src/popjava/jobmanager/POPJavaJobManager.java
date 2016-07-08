@@ -58,8 +58,6 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 */
 	public static void main(String[] args) {
 		args = POPSystem.initialize(args);
-		
-		System.out.println(POPSystem.appServiceAccessPoint);
 
 		// get list of daemons in arguments
 		List<DaemonInfo> daemons = DaemonInfo.parse(args);
@@ -78,11 +76,11 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 					n = thisJm.nop();
 					System.out.println(n);
 					
-					if(n % 100 == 0) {
-						tempJm = PopJava.newActive(POPJavaJobManager.class, jm.getAccessPoint());
-						thisJm.exit();
-						thisJm = tempJm;
-					}
+//					if(n % 100 == 0) {
+//						tempJm = PopJava.newActive(POPJavaJobManager.class, jm.getAccessPoint());
+//						thisJm.exit();
+//						thisJm = tempJm;
+//					}
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException ex) {
