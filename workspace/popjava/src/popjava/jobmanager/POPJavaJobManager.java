@@ -356,6 +356,11 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		if (allocateCombox.receive(buffer) > 0) {
 			int status = buffer.getInt();
 			String str = buffer.getString();
+			
+			System.out.println("BufferXDR");
+			System.out.println(status);
+			System.out.println(str);
+			System.out.println();
 
 			if (status == 0) {
 				objaccess.setAccessString(str);
