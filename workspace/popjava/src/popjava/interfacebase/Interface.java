@@ -648,7 +648,7 @@ public class Interface {
 			argvList.add(1, "-Xmx"+od.getMemoryReq()+"m");
 		}*/
 		
-		if(codeFile.startsWith(System.getProperty("java.home") + "/bin/java") && Configuration.ACTIVATE_JMX){
+		if(codeFile.startsWith("java") && Configuration.ACTIVATE_JMX){
 			argvList.add(1, "-Dcom.sun.management.jmxremote.port="+(int)(Math.random() * 1000+3000));
 			argvList.add(1, "-Dcom.sun.management.jmxremote.ssl=false");
 			argvList.add(1, "-Dcom.sun.management.jmxremote.authenticate=false");
