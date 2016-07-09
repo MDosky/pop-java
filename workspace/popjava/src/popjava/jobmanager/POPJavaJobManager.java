@@ -352,6 +352,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 		BufferXDR buffer = new BufferXDR();
 		int result = 0;
+
 		if (allocateCombox.receive(buffer) > 0) {
 			int status = buffer.getInt();
 			String str = buffer.getString();
@@ -367,7 +368,6 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 				result = status;
 			}
 		} else {
-			System.out.println("Didn't receive");
 			result = -1;
 		}
 		allocateCombox.close();
