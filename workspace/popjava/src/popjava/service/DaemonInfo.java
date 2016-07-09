@@ -11,10 +11,10 @@ import java.util.List;
  * @author Dosky
  */
 public class DaemonInfo {
-    protected final String hostname;
-    protected final String password;
-    protected final int port;
-    protected final long id;
+    protected String hostname;
+    protected String password;
+    protected int port;
+    protected long id;
 
 	/**
 	 * Create a new named Daemon description
@@ -41,27 +41,14 @@ public class DaemonInfo {
     }
 	
 	/**
-	 * Create a generic Daemon by receiving its toString form
-	 * @param arg 
+	 * Create a generic Daemon by receiving only the password
+	 * @param password 
 	 */
-	public DaemonInfo(String arg) {
-		String[] args = arg.split(":|@");
-		switch (args.length) {
-			case 4:
-				this.hostname = args[2];
-				this.password = args[1];
-				this.port = Integer.parseInt(args[3]);
-				this.id = Long.parseLong(args[0]);
-				break;
-			case 3:
-				this.hostname = args[1];
-				this.password = args[0];
-				this.port = Integer.parseInt(args[2]);
-				this.id = 0;
-				break;
-			default:
-				throw new IllegalArgumentException("DaemonInfo args don't match");
-		}
+	public DaemonInfo(String password) {
+		this("localhost", password, 0);
+	}
+	
+	private DaemonInfo() {
 	}
 
     public String getHostname() {
@@ -76,6 +63,10 @@ public class DaemonInfo {
         return port;
     }
 
+	public void setPort(int port) {
+		this.port = port;
+	}
+
     public long getId() {
         return id;
     }
@@ -88,6 +79,33 @@ public class DaemonInfo {
 	}
 	
 	/**
+	 * Construct a DaemonInfo object from its toString representation
+	 * @param arg
+	 * @return 
+	 */
+	public static DaemonInfo fromString(String arg) {
+		DaemonInfo di = new DaemonInfo();
+		String[] args = arg.split(":|@");
+		switch (args.length) {
+			case 4:
+				di.hostname = args[2];
+				di.password = args[1];
+				di.port = Integer.parseInt(args[3]);
+				di.id = Long.parseLong(args[0]);
+				break;
+			case 3:
+				di.hostname = args[1];
+				di.password = args[0];
+				di.port = Integer.parseInt(args[2]);
+				di.id = 0;
+				break;
+			default:
+				throw new IllegalArgumentException("DaemonInfo args don't match");
+		}
+		return di;
+	}
+	
+	/**
 	 * 
 	 * @param args Console arguments
 	 * @return A list of daemon we should be able to use
@@ -96,7 +114,7 @@ public class DaemonInfo {
 		List<DaemonInfo> daemons = new ArrayList<>();
 		for(String arg : args) {
 			try {
-				daemons.add(new DaemonInfo(arg));
+				daemons.add(DaemonInfo.fromString(arg));
 			} catch(Exception e) {
 				// we simply don't use the unknow and failed to parse arguments
 			}

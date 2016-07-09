@@ -7,10 +7,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import popjava.PopJava;
+import popjava.annotation.POPAsyncMutex;
 import popjava.annotation.POPClass;
 import popjava.annotation.POPObjectDescription;
 import popjava.annotation.POPParameter;
 import popjava.annotation.POPSyncConc;
+import popjava.annotation.POPSyncMutex;
 import popjava.annotation.POPSyncSeq;
 import popjava.base.POPErrorCode;
 import popjava.base.POPException;
@@ -45,7 +47,6 @@ import popjava.util.Util;
 public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 	private final List<DaemonInfo> daemons;
-	private final int size;
 
 	private ObjectDescription nod;
 	private int current = 0;
@@ -54,58 +55,49 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * Instantiate a new JM
 	 *
 	 * @param args Every argument is a Daemon's description
-	 * {password}@{hostname}:{port}
+	 * [{id}:]{password}@{hostname}:{port}
 	 */
 	public static void main(String[] args) {
 		args = POPSystem.initialize(args);
 
 		System.out.println("[JM] Initilizing");
-		final POPJavaJobManager jm = PopJava.newActive(POPJavaJobManager.class, args);
+		POPJavaJobManager jm = PopJava.newActive(POPJavaJobManager.class, args);
 		System.out.println("[JM] Initialized");
-
-//		new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				POPJavaJobManager thisJm = PopJava.newActive(POPJavaJobManager.class, jm.getAccessPoint());
-//				POPJavaJobManager tempJm;
-//				long n;
-//				while (true) {
-//					n = thisJm.nop();
-//					System.out.println(n);
-//					
-//					if(n % 100 == 0) {
-//						tempJm = PopJava.newActive(POPJavaJobManager.class, jm.getAccessPoint());
-//						thisJm.exit();
-//						thisJm = tempJm;
-//					}
-//					try {
-//						Thread.sleep(100);
-//					} catch (InterruptedException ex) {
-//						System.out.println("inter");
-//					}
-//				}
-//			}
-//		}).start();
 	}
 
-	@POPObjectDescription(url = "localhost:2711")
+	@POPObjectDescription(url = "localhost")
 	public POPJavaJobManager() {
-		this("test:@localhost:" + POPJavaDeamon.POP_JAVA_DEAMON_PORT);
+		this("");
 	}
 
-	@POPObjectDescription(url = "localhost:2711")
+	@POPObjectDescription(url = "localhost")
 	public POPJavaJobManager(String args) {
 		// get list of daemons in arguments		
-		this.daemons = Collections.unmodifiableList(DaemonInfo.parse(args));
-		this.size = daemons.size();
+		this.daemons = DaemonInfo.parse(args);
 	}
-
-//	private long nop = Long.MIN_VALUE;
-//
-//	@POPSyncSeq
-//	public long nop() {
-//		return nop++;
-//	}
+	
+	/**
+	 * Add a new daemon to the available ones
+	 * @param di 
+	 */
+	@POPAsyncMutex
+    public void addDaemon(@POPParameter(POPParameter.Direction.IN) DaemonInfo di) {
+		this.daemons.add(di);
+	}
+	
+	/**
+	 * Remove daemon when crashed or other
+	 * @param di 
+	 */
+	@POPAsyncMutex
+	public void removeDaemon(@POPParameter(POPParameter.Direction.IN) DaemonInfo di) {
+		for(DaemonInfo d : daemons) {
+			if(d.equals(di)) {
+				daemons.remove(di);
+				return;
+			}
+		}
+	}
 
 	/**
 	 * Return the next host to use. Right now it's a Round-robin but in future
@@ -115,10 +107,10 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 */
 	private int getNextHost() {
 		int c = current;
-		current = (current + 1) % size;
+		current = (current + 1) % daemons.size();
 		return c;
 	}
-
+	
 	@Override
 	@POPSyncConc(id = 12)
 	public int createObject(POPAccessPoint localservice, String objname,
