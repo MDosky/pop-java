@@ -97,7 +97,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	}
 
 	@POPObjectDescription(url = "localhost:2711")
-	public POPJavaJobManager(DaemonInfo[] daemons) {
+	public POPJavaJobManager(DaemonInfo... daemons) {
 		this.daemons = Collections.unmodifiableList(Arrays.asList(daemons));
 		this.size = daemons.length;
 	}
