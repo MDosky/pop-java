@@ -102,12 +102,12 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		this.size = daemons.length;
 	}
 
-	private long nop = Long.MIN_VALUE;
-
-	@POPSyncSeq
-	public long nop() {
-		return nop++;
-	}
+//	private long nop = Long.MIN_VALUE;
+//
+//	@POPSyncSeq
+//	public long nop() {
+//		return nop++;
+//	}
 
 	/**
 	 * Return the next host to use. Right now it's a Round-robin but in future
