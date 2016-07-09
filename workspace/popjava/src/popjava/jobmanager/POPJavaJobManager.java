@@ -59,11 +59,8 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	public static void main(String[] args) {
 		args = POPSystem.initialize(args);
 
-		// get list of daemons in arguments
-		List<DaemonInfo> daemons = DaemonInfo.parse(args);
-
 		System.out.println("[JM] Initilizing");
-		final POPJavaJobManager jm = PopJava.newActive(POPJavaJobManager.class, daemons.toArray(new DaemonInfo[0]));
+		final POPJavaJobManager jm = PopJava.newActive(POPJavaJobManager.class, args);
 		System.out.println("[JM] Initialized");
 
 //		new Thread(new Runnable() {
@@ -93,13 +90,14 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 	@POPObjectDescription(url = "localhost:2711")
 	public POPJavaJobManager() {
-		this(new DaemonInfo[]{new DaemonInfo("localhost", "", POPJavaDeamon.POP_JAVA_DEAMON_PORT, 0)});
+		this("test:@localhost:" + POPJavaDeamon.POP_JAVA_DEAMON_PORT);
 	}
 
 	@POPObjectDescription(url = "localhost:2711")
-	public POPJavaJobManager(DaemonInfo... daemons) {
-		this.daemons = Collections.unmodifiableList(Arrays.asList(daemons));
-		this.size = daemons.length;
+	public POPJavaJobManager(String args) {
+		// get list of daemons in arguments		
+		this.daemons = Collections.unmodifiableList(DaemonInfo.parse(args));
+		this.size = daemons.size();
 	}
 
 //	private long nop = Long.MIN_VALUE;
