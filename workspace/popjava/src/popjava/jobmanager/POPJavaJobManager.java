@@ -81,8 +81,12 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * @param di 
 	 */
 	@POPAsyncMutex
-    public void addDaemon(@POPParameter(POPParameter.Direction.IN) DaemonInfo di) {
-		this.daemons.add(di);
+    public void registerDaemon(String di) {
+		try {
+			this.daemons.add(DaemonInfo.fromString(di));
+		} catch(IllegalArgumentException e) {
+			LogWriter.writeDebugInfo("Daemon information was not valid: " + di);
+		}
 	}
 	
 	/**
