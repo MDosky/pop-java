@@ -339,6 +339,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 				}
 		}
 
+		System.out.println(ret);
 		if (ret == -1) {
 			return ret;
 		}
