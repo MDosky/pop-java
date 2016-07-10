@@ -16,6 +16,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import popjava.system.POPJavaConfiguration;
+import popjava.util.LogWriter;
 import popjava.util.SystemUtil;
 
 /**
@@ -86,7 +87,7 @@ public class POPJavaDeamon implements Runnable, Closeable{
 				
 				List<String> commands = new ArrayList<String>();
 				
-				System.out.println("Execute command: ");
+				LogWriter.writeDebugInfo("Execute command: ");
 				
 				
 				String saltedHash = getSaltedHash(salt, daemonInfo.password);
@@ -94,7 +95,7 @@ public class POPJavaDeamon implements Runnable, Closeable{
 				//Read command to execute
 				String challengeAnswer = reader.readLine();
 				if(!saltedHash.equals(challengeAnswer)){
-					System.err.println("The supplied secret was wrong : "+challengeAnswer+" should be "+saltedHash+" using password "+daemonInfo.password);
+					LogWriter.writeDebugInfo("The supplied secret was wrong : "+challengeAnswer+" should be "+saltedHash+" using password "+daemonInfo.password);
 					writer.write("ERROR PASS\n");
 					writer.close();
 					reader.close();
@@ -126,7 +127,7 @@ public class POPJavaDeamon implements Runnable, Closeable{
 					}
 					
 					commands.add(line);
-					System.out.print(line+" ");
+					LogWriter.writeDebugInfo(line+" ");
 
 					if(i == 0 && line.equals("java")){
 						isJava = true;
@@ -134,7 +135,6 @@ public class POPJavaDeamon implements Runnable, Closeable{
 					
 					isClassPath = line.equals("-cp");
 				}
-				System.out.println();
 				
 				//Execute command
 				if(isJava){
@@ -190,12 +190,12 @@ public class POPJavaDeamon implements Runnable, Closeable{
 		
 		Executor executor = Executors.newCachedThreadPool();
 		
-		System.out.println("Started POP-Java deamon");
+		LogWriter.writeDebugInfo("Started POP-Java deamon");
 		
 		try{
     		while(!Thread.currentThread().isInterrupted()){
 		        Socket socket = serverSocket.accept();
-	            System.out.println("Accepted connection");
+	            LogWriter.writeDebugInfo("Accepted connection");
 	            executor.execute(new Acceptor(socket));
     		}
 		}catch(IOException e){
@@ -205,7 +205,7 @@ public class POPJavaDeamon implements Runnable, Closeable{
 		    serverSocket.close();
 		}
 		
-		System.out.println("Closed POP-Java deamon");
+		LogWriter.writeDebugInfo("Closed POP-Java deamon");
 	}
 	
 	/**

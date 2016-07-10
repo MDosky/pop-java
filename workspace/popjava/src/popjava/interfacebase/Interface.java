@@ -243,7 +243,6 @@ public class Interface {
         
         int createdCode = jobManager.createObject(POPSystem.appServiceAccessPoint, objectName, constOd, allocatedAccessPoint.length, 
         		allocatedAccessPoint, remotejobscontact.length, remotejobscontact);
-		System.out.println("GET AP: " + Arrays.toString(allocatedAccessPoint));
 		jobManager.exit();
         if (createdCode != 0) {
         	switch (createdCode) {

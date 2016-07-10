@@ -53,8 +53,6 @@ public class ComboxReceiveRequestSocket implements Runnable {
 			Request popRequest = new Request();
 			try {
 				if (!receiveRequest(popRequest)) {
-					System.out.println("received exit status " + popRequest);
-					System.out.println("  "  + s);
 					setStatus(EXIT);
 					break;
 				}

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import popjava.PopJava;
@@ -13,8 +12,6 @@ import popjava.annotation.POPClass;
 import popjava.annotation.POPObjectDescription;
 import popjava.annotation.POPParameter;
 import popjava.annotation.POPSyncConc;
-import popjava.annotation.POPSyncMutex;
-import popjava.annotation.POPSyncSeq;
 import popjava.base.POPErrorCode;
 import popjava.base.POPException;
 import popjava.base.POPObject;
@@ -28,7 +25,6 @@ import popjava.codemanager.POPJavaAppService;
 import popjava.combox.ComboxAllocateSocket;
 import popjava.dataswaper.ObjectDescriptionInput;
 import popjava.service.DaemonInfo;
-import popjava.service.POPJavaDeamon;
 import popjava.service.POPJavaDeamonConnector;
 import static popjava.interfacebase.Interface.getAppcoreService;
 import static popjava.interfacebase.Interface.getCodeFile;
@@ -131,7 +127,6 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		int howmany, final @POPParameter(POPParameter.Direction.INOUT) POPAccessPoint[] objcontacts,
 		int howmany2, final @POPParameter(POPParameter.Direction.INOUT) POPAccessPoint[] remotejobcontacts) {
 
-		System.out.println(String.format("%s\n  %s %s\n  %d %s\n  %d %s", localservice, objname, od, howmany, objcontacts, howmany2, remotejobcontacts));
 		// skip if it's not a request
 		if (howmany <= 0) {
 			return 0;
@@ -160,8 +155,6 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			LogWriter.writeDebugInfo(String.format("Exception in JogMgr::CreateObject: %s", e.getMessage()));
 			return POPErrorCode.POP_JOBSERVICE_FAIL;
 		}
-
-		System.out.println("PUT AP: " + Arrays.toString(objcontacts));
 
 		return 0;
 	}
