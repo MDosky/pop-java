@@ -14,7 +14,6 @@ public class DaemonInfo {
     protected String hostname;
     protected String password;
     protected int port;
-    protected long id;
 
 	/**
 	 * Create a new named Daemon description
@@ -23,21 +22,10 @@ public class DaemonInfo {
 	 * @param port
 	 * @param id 
 	 */
-    public DaemonInfo(String hostname, String password, int port, long id) {
+    public DaemonInfo(String hostname, String password, int port) {
         this.hostname = hostname;
         this.password = password;
         this.port = port;
-        this.id = id;
-    }
-	
-	/**
-	 * Create a generic Daemon description
-	 * @param hostname
-	 * @param password
-	 * @param port 
-	 */
-    public DaemonInfo(String hostname, String password, int port) {
-        this(hostname, password, port, 0);
     }
 	
 	/**
@@ -46,6 +34,14 @@ public class DaemonInfo {
 	 */
 	public DaemonInfo(String password) {
 		this("localhost", password, 0);
+	}
+	
+	/**
+	 * Create a generic Daemon by receiving only the password
+	 * @param password 
+	 */
+	public DaemonInfo(int port, String password) {
+		this("localhost", password, port);
 	}
 	
 	private DaemonInfo() {
@@ -67,14 +63,10 @@ public class DaemonInfo {
 		this.port = port;
 	}
 
-    public long getId() {
-        return id;
-    }
-
 	@Override
 	public String toString() {
-		if(id > 0)
-			return String.format("%d:%s@%s:%s", id, password, hostname, port);
+		if(password.isEmpty())
+			return String.format("%s:%s", hostname, port);
 		return String.format("%s@%s:%s", password, hostname, port);
 	}
 	
@@ -87,17 +79,14 @@ public class DaemonInfo {
 		DaemonInfo di = new DaemonInfo();
 		String[] args = arg.split(":|@");
 		switch (args.length) {
-			case 4:
-				di.hostname = args[2];
-				di.password = args[1];
-				di.port = Integer.parseInt(args[3]);
-				di.id = Long.parseLong(args[0]);
-				break;
 			case 3:
 				di.hostname = args[1];
 				di.password = args[0];
 				di.port = Integer.parseInt(args[2]);
-				di.id = 0;
+				break;
+			case 2:
+				di.hostname = args[0];
+				di.port = Integer.parseInt(args[1]);
 				break;
 			default:
 				throw new IllegalArgumentException("DaemonInfo args don't match");

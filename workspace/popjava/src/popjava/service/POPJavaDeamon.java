@@ -28,15 +28,18 @@ public class POPJavaDeamon implements Runnable, Closeable{
 
 	public static final String SUCCESS = "OK";
 	public static final int POP_JAVA_DEAMON_PORT = 43424;
-	private final int serverPort;
 	private ServerSocket serverSocket;
-	private String password = "";
 	
 	private static final String BACKUP_JAR = "build/jar/popjava.jar";
 	
+	private final DaemonInfo daemonInfo;
+
+	public POPJavaDeamon(DaemonInfo daemonInfo) {
+		this.daemonInfo = daemonInfo;
+	}
+	
 	public POPJavaDeamon(String password, int port){
-		this.serverPort = port;
-		this.password = password;
+		this(new DaemonInfo(port, password));
 	}
         
 	public POPJavaDeamon(String password) {
@@ -86,12 +89,12 @@ public class POPJavaDeamon implements Runnable, Closeable{
 				System.out.println("Execute command: ");
 				
 				
-				String saltedHash = getSaltedHash(salt, password);
+				String saltedHash = getSaltedHash(salt, daemonInfo.password);
 				
 				//Read command to execute
 				String challengeAnswer = reader.readLine();
 				if(!saltedHash.equals(challengeAnswer)){
-					System.err.println("The supplied secret was wrong : "+challengeAnswer+" should be "+saltedHash+" using password "+password);
+					System.err.println("The supplied secret was wrong : "+challengeAnswer+" should be "+saltedHash+" using password "+daemonInfo.password);
 					writer.write("ERROR PASS\n");
 					writer.close();
 					reader.close();
@@ -179,7 +182,11 @@ public class POPJavaDeamon implements Runnable, Closeable{
 	 * @throws IOException
 	 */
 	public void start() throws IOException{
-		serverSocket = new ServerSocket(serverPort);
+		serverSocket = new ServerSocket(daemonInfo.port);
+		
+		// if port was 0, save and propage to references the real port
+		if(daemonInfo.port == 0)
+			daemonInfo.setPort(serverSocket.getLocalPort());
 		
 		Executor executor = Executors.newCachedThreadPool();
 		
