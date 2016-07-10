@@ -39,7 +39,7 @@ public class SystemUtil {
 		}
 		
 		// add java location to first argument
-		if(argvs.size() > 0 && argvs.get(0).contains("java"))
+		if(argvs.size() > 0 && argvs.get(0).startsWith("java"))
 			argvs.set(0, System.getProperty("java.home") + "/bin/" + argvs.get(0));
 		
 		ProcessBuilder pb = new ProcessBuilder(argvs);
