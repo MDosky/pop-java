@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import popjava.PopJava;
 import popjava.annotation.POPAsyncMutex;
 import popjava.annotation.POPClass;
@@ -50,6 +51,8 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 	private ObjectDescription nod;
 	private int current = 0;
+	
+	private Random rnd = new Random();
 
 	/**
 	 * Instantiate a new JM
@@ -110,6 +113,12 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * @return
 	 */
 	private int getNextHost() {
+		// out of bound, reset
+		if(current >= daemons.size()) {
+			current = rnd.nextInt(daemons.size());
+			return current;
+		}
+		// classic round robin behavior
 		int c = current;
 		current = (current + 1) % daemons.size();
 		return c;
