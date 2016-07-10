@@ -34,8 +34,13 @@ public class SystemUtil {
 		long startTime = System.currentTimeMillis();
 		LogWriter.writeDebugInfo("Run command");
 		for(String arg: argvs){
+			System.out.println(arg);
 			LogWriter.writeDebugInfo(arg);
 		}
+		
+		// add java location to first argument
+		if(argvs.size() > 0 && argvs.get(0).contains("java"))
+			argvs.set(0, System.getProperty("java.home") + "/bin/" + argvs.get(0));
 		
 		ProcessBuilder pb = new ProcessBuilder(argvs);
 		if(Configuration.REDIRECT_OUTPUT_TO_ROOT){
