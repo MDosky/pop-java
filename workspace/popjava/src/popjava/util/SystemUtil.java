@@ -34,7 +34,6 @@ public class SystemUtil {
 		long startTime = System.currentTimeMillis();
 		LogWriter.writeDebugInfo("Run command");
 		for(String arg: argvs){
-			System.out.println(arg);
 			LogWriter.writeDebugInfo(arg);
 		}
 		
