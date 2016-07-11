@@ -89,7 +89,7 @@ public class POPJavaDeamon implements Runnable, Closeable{
 				
 				List<String> commands = new ArrayList<String>();
 				
-				LogWriter.writeDebugInfo("Execute command: ");
+				System.out.println("Execute command: ");
 				
 				
 				String saltedHash = getSaltedHash(salt, daemonInfo.password);
@@ -97,7 +97,7 @@ public class POPJavaDeamon implements Runnable, Closeable{
 				//Read command to execute
 				String challengeAnswer = reader.readLine();
 				if(!saltedHash.equals(challengeAnswer)){
-					LogWriter.writeDebugInfo("The supplied secret was wrong : "+challengeAnswer+" should be "+saltedHash+" using password "+daemonInfo.password);
+					System.out.println("The supplied secret was wrong : "+challengeAnswer+" should be "+saltedHash+" using password "+daemonInfo.password);
 					writer.write("ERROR PASS\n");
 					writer.close();
 					reader.close();
@@ -129,7 +129,7 @@ public class POPJavaDeamon implements Runnable, Closeable{
 					}
 					
 					commands.add(line);
-					LogWriter.writeDebugInfo(line+" ");
+					System.out.println(line+" ");
 
 					if(i == 0 && line.equals("java")){
 						isJava = true;
@@ -192,12 +192,12 @@ public class POPJavaDeamon implements Runnable, Closeable{
 		
 		Executor executor = Executors.newCachedThreadPool();
 		
-		LogWriter.writeDebugInfo("Started POP-Java deamon");
+		System.out.println("Started POP-Java deamon");
 		
 		try{
     		while(!Thread.currentThread().isInterrupted()){
 		        Socket socket = serverSocket.accept();
-	            LogWriter.writeDebugInfo("Accepted connection");
+	            System.out.println("Accepted connection");
 	            executor.execute(new Acceptor(socket));
     		}
 		}catch(IOException e){
@@ -207,7 +207,7 @@ public class POPJavaDeamon implements Runnable, Closeable{
 		    serverSocket.close();
 		}
 		
-		LogWriter.writeDebugInfo("Closed POP-Java deamon");
+		System.out.println("Closed POP-Java deamon");
 	}
 	
 	/**
