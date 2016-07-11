@@ -243,7 +243,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 	private static String getPOPCodeFile() {
 
-		String popPath = "";
+		String popPath = POPJavaConfiguration.getClassPath();
 		String popJar = POPJavaConfiguration.getPopJavaJar();
 
 		return String.format(
