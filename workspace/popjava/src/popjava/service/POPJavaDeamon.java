@@ -16,6 +16,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import popjava.system.POPJavaConfiguration;
+import popjava.system.POPSystem;
 import popjava.util.LogWriter;
 import popjava.util.SystemUtil;
 
@@ -37,6 +38,7 @@ public class POPJavaDeamon implements Runnable, Closeable{
 
 	public POPJavaDeamon(DaemonInfo daemonInfo) {
 		this.daemonInfo = daemonInfo;
+		this.daemonInfo.setHostname(POPSystem.getHostIP());
 	}
 	
 	public POPJavaDeamon(String password, int port){

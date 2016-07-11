@@ -51,6 +51,10 @@ public class DaemonInfo {
         return hostname;
     }
 
+	protected void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+
     public String getPassword() {
         return password;
     }
