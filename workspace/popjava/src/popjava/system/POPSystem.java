@@ -43,7 +43,7 @@ import popjava.util.Util.OSType;
 public class POPSystem {
 	private static POPRemoteLogThread prlt;
 	private static String platform = "linux";
-	private static boolean initialized = false;
+	public static boolean initialized = false;
 	
 	/**
 	 * POP-Java location environement variable name
