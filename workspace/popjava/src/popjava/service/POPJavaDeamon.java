@@ -111,22 +111,22 @@ public class POPJavaDeamon implements Runnable, Closeable{
 				for(int i = 0; i < commandLength; i++){
 					String line = reader.readLine();
 					//If the current parameter is the classpath, modify it to fit local system
-//					if(isJava && isClassPath){ 
-//						if(!isClasspathValid(line)){
-//							String temp = POPJavaConfiguration.getClassPath();
-//							if(temp != null && !temp.isEmpty()){
-//								line = temp;
-//							}
-//						}
-//					}
+					if(isJava && isClassPath){ 
+						if(!isClasspathValid(line)){
+							String temp = POPJavaConfiguration.getClassPath();
+							if(temp != null && !temp.isEmpty()){
+								line = temp;
+							}
+						}
+					}
 					
-//					if(line.startsWith("-javaagent:")){
-//						String popJavaJar = POPJavaConfiguration.getPOPJavaCodePath();
-//						if(!POPJavaConfiguration.isJar()){
-//							popJavaJar = BACKUP_JAR;
-//						}
-//						line = "-javaagent:"+popJavaJar;
-//					}
+					if(line.startsWith("-javaagent:")){
+						String popJavaJar = POPJavaConfiguration.getPOPJavaCodePath();
+						if(!POPJavaConfiguration.isJar()){
+							popJavaJar = BACKUP_JAR;
+						}
+						line = "-javaagent:"+popJavaJar;
+					}
 					
 					commands.add(line);
 					System.out.println(line+" ");
