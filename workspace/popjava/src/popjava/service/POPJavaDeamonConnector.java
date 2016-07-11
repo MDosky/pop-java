@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,6 +35,7 @@ public class POPJavaDeamonConnector {
 	 * @throws IOException
 	 */
 	public boolean sendCommand(String secret, List<String> command) throws IOException{
+		System.out.println("Sending : " + Arrays.toString(command.toArray(new String[0])));
 		BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		String salt = reader.readLine();
 		String saltedHash = POPJavaDeamon.getSaltedHash(salt, secret);

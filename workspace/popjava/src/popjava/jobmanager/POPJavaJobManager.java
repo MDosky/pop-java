@@ -158,7 +158,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 		return 0;
 	}
-
+	
 	/**
 	 * Try a local execution for the associated parallel object
 	 *
@@ -243,13 +243,10 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 	private static String getPOPCodeFile() {
 
-		String popPath = POPJavaConfiguration.getClassPath();
-		String popJar = POPJavaConfiguration.getPopJavaJar();
-
 		return String.format(
 			POPJavaConfiguration.getBrokerCommand(),
-			popJar,
-			popPath);
+			"popjava.jar",
+			"popjava.jar:pop-app.jar");
 	}
 
 	/**
@@ -304,7 +301,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			argvList.add(appString);
 		}
 		// always use this job manager for every object
-		String jobString = String.format("-jobservice=%s", PopJava.getAccessPoint(this).toString());
+		String jobString = String.format("-jobservice=%s", getAccessPoint().toString());
 		argvList.add(jobString);
 
 		int ret = -1;
