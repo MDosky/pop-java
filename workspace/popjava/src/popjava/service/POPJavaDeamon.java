@@ -132,6 +132,7 @@ public class POPJavaDeamon implements Runnable, Closeable{
 					System.out.println(line+" ");
 
 					if(i == 0 && line.equals("java")){
+						line = System.getProperty("java.home") + "/bin/java";
 						isJava = true;
 					}
 					
