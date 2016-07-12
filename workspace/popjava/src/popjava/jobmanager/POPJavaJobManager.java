@@ -303,6 +303,9 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		// always use this job manager for every object
 		String jobString = String.format("-jobservice=%s", getAccessPoint().toString());
 		argvList.add(jobString);
+		
+		// remove codelocation
+		Util.removeStringFromList(argvList, "-codelocation");
 
 		int ret = -1;
 
