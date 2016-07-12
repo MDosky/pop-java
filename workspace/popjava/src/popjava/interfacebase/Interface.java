@@ -179,6 +179,7 @@ public class Interface {
 			
 			boolean allocated = allocateThroughJobmanager(objectName, allocatedAccessPoint,
                     remotejobscontact);
+			System.out.println("Received AP from JM: " + Arrays.toString(allocatedAccessPoint));
 			
 			if(!allocated && od.getHostName().isEmpty()){
 			    LogWriter.printDebug("No url specified for "+objectName+", fallback to localhost");
@@ -186,7 +187,6 @@ public class Interface {
 			    tryLocal(objectName, popAccessPoint);
 			}
 		}
-		System.out.println("Received AP from JM: " + popAccessPoint);
 		
 		return bind(popAccessPoint);
 	}
