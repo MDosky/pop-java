@@ -341,8 +341,9 @@ System.out.println(10);
 					// the port in this case is the daemon's not the one we want
 					int port = Integer.parseInt(rport);
 System.out.println(11);
+System.out.format("%s %d", hostname, port);
 					connector = new POPJavaDeamonConnector(hostname, port);
-		System.out.println("Sending : " + Arrays.toString(argvList.toArray(new String[0])));
+System.out.println("Sending : " + Arrays.toString(argvList.toArray(new String[0])));
 					if (connector.sendCommand(nod.getConnectionSecret(), argvList)) {
 System.out.println(12);
 						ret = 0;
