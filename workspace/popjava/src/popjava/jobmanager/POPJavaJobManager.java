@@ -150,7 +150,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 				pap = new POPAccessPoint();
 				// taken from Interface.java
 				tryLocal(objname, pap);
-				if(pap == null)
+				if(pap.isEmpty())
 					throw new Exception("Failed to retreive AP");
 				
 				objcontacts[i] = pap;
@@ -181,6 +181,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		// Get ClassName
 
 		// Check if Od is empty
+System.out.println(1);
 		boolean odEmpty = nod.isEmpty();
 		if (odEmpty) {
 			return false;
@@ -192,21 +193,25 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			return false;
 		}*/
 
+System.out.println(2);
 		if (joburl == null || joburl.length() == 0) {
 			return false;
 		}
 
 		codeFile = nod.getCodeFile();
 
+System.out.println(3);
 		// Host name existed
 		if (codeFile == null || codeFile.length() == 0) {
 
+System.out.println(3);
 			codeFile = getRemoteCodeFile(objectName);
 			if (codeFile == null || codeFile.length() == 0) {
 				return false;
 			}
 		}
 
+System.out.println(4);
 		String rport = "";
 		int index = joburl.lastIndexOf(":");
 		if (index > 0) {
@@ -214,6 +219,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			joburl = joburl.substring(0, index);
 		}
 
+System.out.println(5);
 		int status = localExec(joburl, codeFile, objectName, rport,
 			POPSystem.appServiceAccessPoint, accesspoint);
 
@@ -270,6 +276,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		String classname, String rport,
 		POPAccessPoint appserv, POPAccessPoint objaccess) {
 
+System.out.println(6);
 		if (codeFile == null || codeFile.length() == 0) {
 			return -1;
 		}
@@ -286,6 +293,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			argvList.add(1, "-Dcom.sun.management.jmxremote.authenticate=false");
 		}
 
+System.out.println(7);
 		if (nod.getJVMParameters() != null && !nod.getJVMParameters().isEmpty()) {
 			String[] jvmParameters = nod.getJVMParameters().split(" ");
 			for (String parameter : jvmParameters) {
@@ -293,6 +301,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			}
 		}
 
+System.out.println(8);
 		ComboxAllocateSocket allocateCombox = new ComboxAllocateSocket();
 		String callbackString = String.format(Broker.CALLBACK_PREFIX + "%s", allocateCombox
 			.getUrl());
@@ -314,6 +323,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 		int ret = -1;
 
+System.out.println(9);
 		switch (nod.getConnectionType()) {
 			case ANY:
 			case SSH:
@@ -325,17 +335,23 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 				ret = SystemUtil.runRemoteCmd(hostname, argvList);
 				break;
 			case DEAMON:
+System.out.println(10);
 				POPJavaDeamonConnector connector;
 				try {
 					// the port in this case is the daemon's not the one we want
 					int port = Integer.parseInt(rport);
+System.out.println(11);
 					connector = new POPJavaDeamonConnector(hostname, port);
+		System.out.println("Sending : " + Arrays.toString(argvList.toArray(new String[0])));
 					if (connector.sendCommand(nod.getConnectionSecret(), argvList)) {
+System.out.println(12);
 						ret = 0;
 					}
 				} catch (UnknownHostException e) {
+System.out.println(13);
 					e.printStackTrace();
 				} catch (IOException e) {
+System.out.println(14);
 					e.printStackTrace();
 				}
 		}
@@ -344,9 +360,11 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			return ret;
 		}
 
+System.out.println(15);
 		allocateCombox.startToAcceptOneConnection();
 
 		if (!allocateCombox.isComboxConnected()) {
+System.out.println(16);
 			LogWriter.writeDebugInfo("Could not connect broker");
 			return -1;
 		}
@@ -355,12 +373,15 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		int result = 0;
 
 		if (allocateCombox.receive(buffer) > 0) {
+System.out.println(17);
 			int status = buffer.getInt();
 			String str = buffer.getString();
 			
 			if (status == 0) {
+System.out.println(18);
 				objaccess.setAccessString(str);
 			} else {
+System.out.println(19);
 				result = status;
 			}
 		} else {
