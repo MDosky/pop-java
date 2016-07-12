@@ -352,6 +352,10 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		if (allocateCombox.receive(buffer) > 0) {
 			int status = buffer.getInt();
 			String str = buffer.getString();
+			
+			System.out.println("Answer from combox");
+			System.out.println(status);
+			System.out.println(str);
 
 			if (status == 0) {
 				objaccess.setAccessString(str);

@@ -129,7 +129,6 @@ public class POPJavaDeamon implements Runnable, Closeable{
 					}
 					
 					commands.add(line);
-					System.out.println(line+" ");
 
 					if(i == 0 && line.equals("java")){
 						line = System.getProperty("java.home") + "/bin/java";
@@ -137,6 +136,8 @@ public class POPJavaDeamon implements Runnable, Closeable{
 					}
 					
 					isClassPath = line.equals("-cp");
+					
+					System.out.println(line+" ");
 				}
 				
 				//Execute command
