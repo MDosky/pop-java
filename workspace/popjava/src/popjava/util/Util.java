@@ -71,7 +71,9 @@ public final class Util {
 	public static String removeStringFromList(List<String> list,
 			String prefix) {
 		String result = null;
-
+System.out.println("List");
+System.out.println(list.size());
+System.out.println("Prefix : " + prefix);
 		int index = 0;
 		for (index = 0; index < list.size(); index++) {
 			String str = list.get(index);
