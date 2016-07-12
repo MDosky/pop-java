@@ -93,10 +93,10 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * @param di 
 	 */
 	@POPAsyncMutex
-	public void removeDaemon(@POPParameter(POPParameter.Direction.IN) DaemonInfo di) {
+	public void removeDaemon(String di) {
 		for(DaemonInfo d : daemons) {
-			if(d.equals(di)) {
-				daemons.remove(di);
+			if(d.toString().equals(di)) {
+				daemons.remove(d);
 				return;
 			}
 		}
@@ -127,6 +127,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		int howmany, final @POPParameter(POPParameter.Direction.INOUT) POPAccessPoint[] objcontacts,
 		int howmany2, final @POPParameter(POPParameter.Direction.INOUT) POPAccessPoint[] remotejobcontacts) {
 
+		LogWriter.writeDebugInfo(String.format("[JM] Request for [%d] %s", howmany, objname));
 		// skip if it's not a request
 		if (howmany <= 0) {
 			return 0;

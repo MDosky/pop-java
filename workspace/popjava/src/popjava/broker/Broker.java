@@ -65,6 +65,7 @@ public final class Broker {
 	static public final String OBJECT_NAME_PREFIX = "-object=";
 	static public final String ACTUAL_OBJECT_NAME_PREFIX = "-actualobject=";
 	static public final String APPSERVICE_PREFIX = "-appservice=";
+	static public final String JOBSERVICE_PREFIX = "-jobservice=";
 
 	protected int state;
 	protected ComboxServer comboxServer;
@@ -848,6 +849,10 @@ public final class Broker {
 				OBJECT_NAME_PREFIX);
 		String actualObjectName = Util.removeStringFromList(argvList,
 				ACTUAL_OBJECT_NAME_PREFIX);
+		String jobService = Util.removeStringFromList(argvList, 
+				JOBSERVICE_PREFIX);
+		if(jobService != null && !jobService.isEmpty())
+			POPSystem.jobService = new POPAccessPoint(jobService);
 		if (actualObjectName != null && actualObjectName.length() > 0) {
 			objectName = actualObjectName;
 		}
