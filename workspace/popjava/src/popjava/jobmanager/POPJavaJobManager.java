@@ -149,7 +149,11 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 				pap = new POPAccessPoint();
 				// taken from Interface.java
 				tryLocal(objname, pap);
+				if(pap == null)
+					throw new Exception("Failed to retreive AP");
+				
 				objcontacts[i] = pap;
+				System.out.println("Received AP from Daemon: " + pap);
 			}
 		} catch (Exception e) {
 			LogWriter.writeDebugInfo(String.format("Exception in JogMgr::CreateObject: %s", e.getMessage()));
@@ -353,10 +357,6 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			int status = buffer.getInt();
 			String str = buffer.getString();
 			
-			System.out.println("Answer from combox");
-			System.out.println(status);
-			System.out.println(str);
-
 			if (status == 0) {
 				objaccess.setAccessString(str);
 			} else {

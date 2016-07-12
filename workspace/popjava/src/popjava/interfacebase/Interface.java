@@ -186,6 +186,7 @@ public class Interface {
 			    tryLocal(objectName, popAccessPoint);
 			}
 		}
+		System.out.println("Received AP from JM: " + popAccessPoint);
 		
 		return bind(popAccessPoint);
 	}
