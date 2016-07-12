@@ -137,7 +137,7 @@ public class POPJavaDeamon implements Runnable, Closeable{
 					
 					isClassPath = line.equals("-cp");
 					
-					System.out.println(line+" ");
+					System.out.print(line+" ");
 				}
 				
 				//Execute command
