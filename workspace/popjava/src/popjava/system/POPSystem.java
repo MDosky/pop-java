@@ -231,15 +231,19 @@ public class POPSystem {
 		}
 		initialize(argvList);
 		
-		if(args.length > 0 && args[0].startsWith("-codeconf=")){
-            String[] tmpArg = new String[args.length-1];
-            for (int i = 0; i < tmpArg.length; i++) {
-                tmpArg[i] = args[i+1];
-            }
-            args = tmpArg;
-        }
+//		if(args.length > 0){
+//			if(args[0].startsWith("-codeconf=")) {
+//				String[] tmpArg = new String[args.length-1];
+//				for (int i = 0; i < tmpArg.length; i++) {
+//					tmpArg[i] = args[i+1];
+//				}
+//				args = tmpArg;
+//			}
+//			
+//        }
 		
-		return args;
+		// use "clean" argvList as new args
+		return argvList.toArray(new String[0]);
 	}
 	
 	private static boolean isStarted = false;
