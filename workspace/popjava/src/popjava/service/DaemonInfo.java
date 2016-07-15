@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 import popjava.baseobject.ConnectionType;
 import popjava.buffer.POPBuffer;
-import popjava.dataswaper.IPOPBase;
 import popjava.jobmanager.ServiceConnector;
 
 /**
@@ -16,11 +15,11 @@ import popjava.jobmanager.ServiceConnector;
  *
  * @author Dosky
  */
-public class DaemonInfo implements ServiceConnector, IPOPBase {
+public class DaemonInfo implements ServiceConnector {
 
-	protected String hostname;
-	protected String password;
-	protected int port;
+	private String hostname;
+	private String password;
+	private int port;
 
 	/**
 	 * Create a new named Daemon description

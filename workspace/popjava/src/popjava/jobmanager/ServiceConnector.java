@@ -15,4 +15,7 @@ public interface ServiceConnector extends IPOPBase {
 
 	@Override
 	public boolean equals(Object o);
+	@Override
+	public int hashCode();
+	
 }
