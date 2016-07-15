@@ -3,10 +3,9 @@ package popjava.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import popjava.annotation.POPObjectDescription;
-import popjava.base.POPObject;
 import popjava.baseobject.ConnectionType;
 import popjava.buffer.POPBuffer;
+import popjava.dataswaper.IPOPBase;
 import popjava.jobmanager.ServiceConnector;
 
 /**
@@ -17,7 +16,7 @@ import popjava.jobmanager.ServiceConnector;
  *
  * @author Dosky
  */
-public class DaemonInfo extends POPObject implements ServiceConnector {
+public class DaemonInfo implements ServiceConnector, IPOPBase {
 
 	protected String hostname;
 	protected String password;
@@ -29,7 +28,6 @@ public class DaemonInfo extends POPObject implements ServiceConnector {
 	 * @param hostname
 	 * @param password
 	 * @param port
-	 * @param id
 	 */
 	public DaemonInfo(String hostname, String password, int port) {
 		this.hostname = hostname;
