@@ -353,6 +353,22 @@ public class ObjectDescriptionInput implements IPOPBaseInput {
 		searchMaxReq = size;
 		searchWaitingtime = waittime;
 	}
+
+	public float getPowerMin() {
+		return powerMin;
+	}
+
+	public float getPowerReq() {
+		return powerReq;
+	}
+
+	public float getMemoryMin() {
+		return memoryMin;
+	}
+
+	public float getMemoryReq() {
+		return memoryReq;
+	}
 	
 	/**
 	 * Serialize the object description into the buffer

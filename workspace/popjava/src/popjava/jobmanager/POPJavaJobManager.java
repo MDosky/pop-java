@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import popjava.PopJava;
@@ -43,7 +44,7 @@ import popjava.util.Util;
 @POPClass(classId = 99924, deconstructor = false, isDistributable = true)
 public class POPJavaJobManager extends POPObject implements JobManagerService {
 
-	private final List<DaemonInfo> daemons;
+	private final List<ServiceConnector> services;
 
 	private ObjectDescription nod;
 	private int current = 0;
@@ -66,40 +67,31 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 	@POPObjectDescription(url = "localhost")
 	public POPJavaJobManager() {
-		this("");
+		services = new LinkedList<>();
 	}
 
-	@POPObjectDescription(url = "localhost")
-	public POPJavaJobManager(String args) {
-		// get list of daemons in arguments		
-		this.daemons = DaemonInfo.parse(args);
-	}
+//	@POPObjectDescription(url = "localhost")
+//	public POPJavaJobManager(String args) {
+//		// get list of daemons in arguments		
+//		this.services = DaemonInfo.parse(args);
+//	}
 	
 	/**
 	 * Add a new daemon to the available ones
-	 * @param di 
+	 * @param service 
 	 */
 	@POPAsyncMutex
-    public void registerDaemon(String di) {
-		try {
-			this.daemons.add(DaemonInfo.fromString(di));
-		} catch(IllegalArgumentException e) {
-			LogWriter.writeDebugInfo("Daemon information was not valid: " + di);
-		}
+    public void registerService(ServiceConnector service) {
+		this.services.add(service);
 	}
 	
 	/**
 	 * Remove daemon when crashed or other
-	 * @param di 
+	 * @param service 
 	 */
 	@POPAsyncMutex
-	public void removeDaemon(String di) {
-		for(DaemonInfo d : daemons) {
-			if(d.toString().equals(di)) {
-				daemons.remove(d);
-				return;
-			}
-		}
+	public void removeDaemon(ServiceConnector service) {
+		services.remove(service);
 	}
 
 	/**
@@ -108,16 +100,16 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 *
 	 * @return
 	 */
-	private int getNextHost() {
+	private ServiceConnector getNextHost() {
 		// out of bound, reset
-		if(current >= daemons.size()) {
-			current = rnd.nextInt(daemons.size());
-			return current;
+		if(current >= services.size()) {
+			current = rnd.nextInt(services.size());
+			return services.get(current);
 		}
 		// classic round robin behavior
 		int c = current;
-		current = (current + 1) % daemons.size();
-		return c;
+		current = (current + 1) % services.size();
+		return services.get(c);
 	}
 	
 	@Override
@@ -135,21 +127,22 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 		try {
 			POPAccessPoint pap;
-			DaemonInfo di;
+			ServiceConnector service;
 			for (int i = 0; i < howmany; i++) {
 				// connection info, random from pool
-				di = daemons.get(getNextHost());
+				service = getNextHost();
 				// new od
 				nod = POPSystem.getDefaultOD();
 				// set daemon infromations
-				nod.setHostname(objname);
-				nod.setHostname(String.format("%s:%d", di.getHostname(), di.getPort()));
-				nod.setConnectionSecret(di.getPassword());
-				nod.setConnectionType(ConnectionType.DEAMON);
+				nod.setConnectionType(service.getConnectionType());
+				nod.setHostname(String.format("%s:%d", service.getHostname(), service.getServicePort()));
+				nod.setConnectionSecret(service.getSecret());
+				nod.setPower(od.getPowerMin(), od.getPowerReq());
+				nod.setMemory(od.getMemoryMin(), od.getMemoryReq());
 				// out access point
 				pap = new POPAccessPoint();
 				// taken from Interface.java
-				tryLocal(objname, pap);
+				createCmd(objname, pap);
 				if(pap.isEmpty())
 					throw new Exception("Failed to retreive AP");
 				
@@ -172,7 +165,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * @throws POPException thrown if any exception occurred during the creation
 	 * process
 	 */
-	private boolean tryLocal(String objectName, POPAccessPoint accesspoint)
+	private boolean createCmd(String objectName, POPAccessPoint accesspoint)
 		throws POPException {
 		//	String hostname = "";
 		String joburl = "";
@@ -213,7 +206,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			joburl = joburl.substring(0, index);
 		}
 
-		int status = localExec(joburl, codeFile, objectName, rport,
+		int status = remoteExec(joburl, codeFile, objectName, rport,
 			POPSystem.appServiceAccessPoint, accesspoint);
 
 		if (status != 0) {
@@ -265,7 +258,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * @param objaccess	Output arguments - Access point to the object
 	 * @return -1 if the local execution failed
 	 */
-	private int localExec(String hostname, String codeFile,
+	private int remoteExec(String hostname, String codeFile,
 		String classname, String rport,
 		POPAccessPoint appserv, POPAccessPoint objaccess) {
 
@@ -316,11 +309,9 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		switch (nod.getConnectionType()) {
 			case ANY:
 			case SSH:
-				// let it choose the port only with SSH
-				if (rport != null && rport.length() > 0) {
-					String portString = String.format("-socket_port=%s", rport);
-					argvList.add(portString);
-				}
+				// different port for SSH setup
+				if(!rport.isEmpty())
+					hostname += ":" + rport;
 				ret = SystemUtil.runRemoteCmd(hostname, argvList);
 				break;
 			case DEAMON:
