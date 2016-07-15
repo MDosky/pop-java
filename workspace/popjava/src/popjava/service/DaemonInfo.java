@@ -3,7 +3,6 @@ package popjava.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import popjava.base.POPObject;
 import popjava.baseobject.ConnectionType;
 import popjava.buffer.POPBuffer;
 import popjava.jobmanager.ServiceConnector;
@@ -54,6 +53,7 @@ public class DaemonInfo implements ServiceConnector {
 	}
 
 	public DaemonInfo() {
+		this("localhost", "", 0);
 	}
 
 	public String getHostname() {
