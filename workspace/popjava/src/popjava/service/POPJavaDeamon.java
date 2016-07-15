@@ -17,7 +17,6 @@ import java.util.concurrent.Executors;
 
 import popjava.system.POPJavaConfiguration;
 import popjava.system.POPSystem;
-import popjava.util.LogWriter;
 import popjava.util.SystemUtil;
 
 /**
@@ -92,12 +91,12 @@ public class POPJavaDeamon implements Runnable, Closeable{
 				System.err.println("Execute command: ");
 				
 				
-				String saltedHash = getSaltedHash(salt, daemonInfo.password);
+				String saltedHash = getSaltedHash(salt, daemonInfo.getPassword());
 				
 				//Read command to execute
 				String challengeAnswer = reader.readLine();
 				if(!saltedHash.equals(challengeAnswer)){
-					System.err.println("The supplied secret was wrong : "+challengeAnswer+" should be "+saltedHash+" using password "+daemonInfo.password);
+					System.err.println("The supplied secret was wrong : "+challengeAnswer+" should be "+saltedHash+" using password "+daemonInfo.getPassword());
 					writer.write("ERROR PASS\n");
 					writer.close();
 					reader.close();
@@ -187,10 +186,10 @@ public class POPJavaDeamon implements Runnable, Closeable{
 	 * @throws IOException
 	 */
 	public void start() throws IOException{
-		serverSocket = new ServerSocket(daemonInfo.port);
+		serverSocket = new ServerSocket(daemonInfo.getPort());
 		
 		// if port was 0, save and propage to references the real port
-		if(daemonInfo.port == 0)
+		if(daemonInfo.getPort() == 0)
 			daemonInfo.setPort(serverSocket.getLocalPort());
 		
 		Executor executor = Executors.newCachedThreadPool();

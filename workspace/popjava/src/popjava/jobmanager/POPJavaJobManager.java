@@ -3,7 +3,6 @@ package popjava.jobmanager;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -16,7 +15,6 @@ import popjava.annotation.POPSyncConc;
 import popjava.base.POPErrorCode;
 import popjava.base.POPException;
 import popjava.base.POPObject;
-import popjava.baseobject.ConnectionType;
 import popjava.baseobject.ObjectDescription;
 import popjava.baseobject.POPAccessPoint;
 import popjava.broker.Broker;
@@ -25,7 +23,6 @@ import popjava.codemanager.AppService;
 import popjava.codemanager.POPJavaAppService;
 import popjava.combox.ComboxAllocateSocket;
 import popjava.dataswaper.ObjectDescriptionInput;
-import popjava.service.DaemonInfo;
 import popjava.service.POPJavaDeamonConnector;
 import static popjava.interfacebase.Interface.getAppcoreService;
 import static popjava.interfacebase.Interface.getCodeFile;
@@ -81,7 +78,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * @param service 
 	 */
 	@POPAsyncMutex
-    public void registerService(ServiceConnector service) {
+    public void registerService(@POPParameter(POPParameter.Direction.IN) ServiceConnector service) {
 		this.services.add(service);
 	}
 	
@@ -90,7 +87,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * @param service 
 	 */
 	@POPAsyncMutex
-	public void removeDaemon(ServiceConnector service) {
+	public void removeDaemon(@POPParameter(POPParameter.Direction.IN) ServiceConnector service) {
 		services.remove(service);
 	}
 
