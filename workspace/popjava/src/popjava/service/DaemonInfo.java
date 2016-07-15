@@ -53,7 +53,7 @@ public class DaemonInfo implements ServiceConnector {
 		this("localhost", password, port);
 	}
 
-	private DaemonInfo() {
+	public DaemonInfo() {
 	}
 
 	public String getHostname() {
