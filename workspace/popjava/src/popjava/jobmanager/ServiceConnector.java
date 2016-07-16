@@ -7,15 +7,19 @@ import popjava.dataswaper.IPOPBase;
  *
  * @author Dosky
  */
-public interface ServiceConnector extends IPOPBase {
-	ConnectionType getConnectionType();
-	String getSecret();
-	String getHostname();
-	int getServicePort();
+public abstract class ServiceConnector implements IPOPBase {
+	public abstract ConnectionType getConnectionType();
+	public abstract String getSecret();
+	public abstract String getHostname();
+	public abstract int getServicePort();
+	
+	public static ServiceConnector fromString() {
+		return null;
+	}
 
 	@Override
-	public boolean equals(Object o);
+	public abstract boolean equals(Object o);
 	@Override
-	public int hashCode();
+	public abstract int hashCode();
 	
 }
