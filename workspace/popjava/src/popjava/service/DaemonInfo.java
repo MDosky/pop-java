@@ -143,17 +143,25 @@ public class DaemonInfo implements ServiceConnector {
 
 	@Override
 	public boolean serialize(POPBuffer buffer) {
+		System.out.println("Serializing");
 		buffer.putString(hostname);
+		System.out.println("port");
 		buffer.putInt(port);
+		System.out.println("pass");
 		buffer.putString(password);
+		System.out.println("End serializing");
 		return true;
 	}
 
 	@Override
 	public boolean deserialize(POPBuffer buffer) {
+		System.out.println("Deserializing");
 		hostname = buffer.getString();
+		System.out.println("int");
 		port = buffer.getInt();
+		System.out.println("string");
 		password = buffer.getString();
+		System.out.println("end deser");
 		return true;
 	}
 
