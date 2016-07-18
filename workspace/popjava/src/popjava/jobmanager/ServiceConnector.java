@@ -9,15 +9,15 @@ import popjava.dataswaper.IPOPBase;
  * @author Dosky
  */
 public abstract class ServiceConnector implements IPOPBase {
+
+	public ServiceConnector() {
+	}
+	
 	public abstract ConnectionType getConnectionType();
 	public abstract String getSecret();
 	public abstract String getHostname();
 	public abstract int getServicePort();
 	
-	public static ServiceConnector fromString() {
-		return null;
-	}
-
 	@Override
 	public abstract boolean equals(Object o);
 	@Override
