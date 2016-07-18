@@ -79,8 +79,8 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * @param service 
 	 */
 	@POPAsyncMutex
-    public void registerService(@POPParameter(POPParameter.Direction.INOUT) DaemonInfo service) {
-		this.services.add(service);
+    public void registerService(String service) {
+		this.services.add(DaemonInfo.fromString(service));
 	}
 	
 	/**
@@ -88,8 +88,8 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * @param service 
 	 */
 	@POPAsyncMutex
-	public void removeDaemon(@POPParameter(POPParameter.Direction.IN) ServiceConnector service) {
-		services.remove(service);
+	public void removeDaemon(String service) {
+		services.remove(DaemonInfo.fromString(service));
 	}
 
 	/**
