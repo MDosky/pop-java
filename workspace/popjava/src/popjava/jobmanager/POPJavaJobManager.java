@@ -79,7 +79,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * @param service 
 	 */
 	@POPAsyncMutex
-    public void registerService(String service) {
+    public void registerDaemon(String service) {
 		this.services.add(DaemonInfo.fromString(service));
 	}
 	
