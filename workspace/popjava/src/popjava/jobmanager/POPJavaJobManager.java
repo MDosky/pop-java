@@ -26,7 +26,6 @@ import popjava.dataswaper.ObjectDescriptionInput;
 import popjava.service.POPJavaDeamonConnector;
 import static popjava.interfacebase.Interface.getAppcoreService;
 import static popjava.interfacebase.Interface.getCodeFile;
-import popjava.service.DaemonInfo;
 import popjava.serviceadapter.POPAppService;
 import popjava.system.POPJavaConfiguration;
 import popjava.system.POPSystem;
@@ -79,7 +78,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * @param service 
 	 */
 	@POPAsyncMutex
-    public void registerService(@POPParameter(POPParameter.Direction.IN) DaemonInfo service) {
+    public void registerService(@POPParameter(POPParameter.Direction.IN) ServiceConnector service) {
 		this.services.add(service);
 	}
 	

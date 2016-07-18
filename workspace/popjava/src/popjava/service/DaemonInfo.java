@@ -46,7 +46,6 @@ public class DaemonInfo extends ServiceConnector {
 	/**
 	 * Create a generic Daemon by receiving only the password
 	 *
-	 * @param port
 	 * @param password
 	 */
 	public DaemonInfo(int port, String password) {
@@ -57,7 +56,6 @@ public class DaemonInfo extends ServiceConnector {
 		this("localhost", "", 0);
 	}
 
-	@Override
 	public String getHostname() {
 		return hostname;
 	}
