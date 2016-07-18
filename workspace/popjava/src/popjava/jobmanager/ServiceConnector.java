@@ -1,6 +1,7 @@
 package popjava.jobmanager;
 
 import popjava.baseobject.ConnectionType;
+import popjava.buffer.POPBuffer;
 import popjava.dataswaper.IPOPBase;
 
 /**
@@ -21,5 +22,10 @@ public abstract class ServiceConnector implements IPOPBase {
 	public abstract boolean equals(Object o);
 	@Override
 	public abstract int hashCode();
-	
+
+	@Override
+	public abstract boolean serialize(POPBuffer buffer);
+
+	@Override
+	public abstract boolean deserialize(POPBuffer buffer);
 }
