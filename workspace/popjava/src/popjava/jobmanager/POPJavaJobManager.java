@@ -78,7 +78,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * Add a new daemon to the available ones
 	 * @param service 
 	 */
-	@POPAsyncMutex
+	@POPAsyncMutex(id = 20)
     public void registerDaemon(String service) {
 		this.services.add(DaemonInfo.fromString(service));
 	}
@@ -87,7 +87,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * Remove daemon when crashed or other
 	 * @param service 
 	 */
-	@POPAsyncMutex
+	@POPAsyncMutex(id = 21)
 	public void removeDaemon(String service) {
 		services.remove(DaemonInfo.fromString(service));
 	}
