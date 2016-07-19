@@ -105,4 +105,9 @@ public class ServiceConnector implements IPOPBase {
 		connectionType = (ConnectionType) buffer.getValue(ConnectionType.class);
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("[%s] %s@%s:%d", connectionType.toString(), secret, hostname, servicePort);
+	}
 }

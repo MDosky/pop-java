@@ -5,7 +5,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 import popjava.PopJava;
 import popjava.annotation.POPAsyncMutex;
 import popjava.annotation.POPClass;
@@ -44,9 +45,12 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	private final List<ServiceConnector> services;
 
 	private ObjectDescription nod;
-	private int current = 0;
+	private final AtomicInteger current = new AtomicInteger();
 	
-	private Random rnd = new Random();
+	private final Semaphore await = new Semaphore(0, true);
+	private final Semaphore sync = new Semaphore(1);
+	
+	public static final String MSG_ALLOC = "[JMC] alloc";
 
 	/**
 	 * Instantiate a new JM
@@ -74,33 +78,30 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	@POPAsyncMutex(id = 20)
     public void registerService(ServiceConnector service) {
 		this.services.add(service);
+		// add to counter
+		await.release();
 	}
 	
-	/**
-	 * Remove daemon when crashed or other
-	 * @param service 
-	 */
-	@POPAsyncMutex(id = 21)
-	public void removeDaemon(ServiceConnector service) {
-		services.remove(service);
-	}
-
 	/**
 	 * Return the next host to use. Right now it's a Round-robin but in future
 	 * it could change
 	 *
 	 * @return
 	 */
-	private ServiceConnector getNextHost() {
-		// out of bound, reset
-		if(current >= services.size()) {
-			current = rnd.nextInt(services.size());
-			return services.get(current);
-		}
-		// classic round robin behavior
-		int c = current;
-		current = (current + 1) % services.size();
-		return services.get(c);
+	private ServiceConnector getNextHost(ObjectDescriptionInput odi) {
+		try {
+			sync.acquire();
+			// out of bound, reset
+			if(current.get() >= services.size()) {
+				// write request
+				System.out.println(String.format(MSG_ALLOC + " %f %f", odi.getMemoryReq(), odi.getMemoryReq()));
+			}
+			sync.release();
+			await.acquire();
+		} catch (InterruptedException ex) { }
+		
+		// linear allocation
+		return services.get(current.getAndIncrement());
 	}
 	
 	@Override
@@ -121,7 +122,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			ServiceConnector service;
 			for (int i = 0; i < howmany; i++) {
 				// connection info, random from pool
-				service = getNextHost();
+				service = getNextHost(od);
 				// new od
 				nod = POPSystem.getDefaultOD();
 				// set daemon infromations
