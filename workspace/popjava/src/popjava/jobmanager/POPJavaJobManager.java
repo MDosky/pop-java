@@ -3,11 +3,6 @@ package popjava.jobmanager;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicInteger;
-import popjava.PopJava;
 import popjava.annotation.POPAsyncMutex;
 import popjava.annotation.POPClass;
 import popjava.annotation.POPObjectDescription;
@@ -41,34 +36,14 @@ import popjava.util.Util;
  */
 @POPClass(classId = 99924, deconstructor = false, isDistributable = true)
 public class POPJavaJobManager extends POPObject implements JobManagerService {
-
-	private final List<ServiceConnector> services;
+	
+	private final ResourceAllocator allocator;
 
 	private ObjectDescription nod;
-	private final AtomicInteger current = new AtomicInteger();
-	
-	private final Semaphore await = new Semaphore(0, true);
-	private final Semaphore sync = new Semaphore(1, true);
-	
-	public static final String MSG_ALLOC = "[JMC] alloc";
-
-	/**
-	 * Instantiate a new JM
-	 *
-	 * @param args Every argument is a Daemon's description
-	 * [{id}:]{password}@{hostname}:{port}
-	 */
-	public static void main(String[] args) {
-		args = POPSystem.initialize(args);
-
-		System.out.println("[JM] Initilizing");
-		POPJavaJobManager jm = PopJava.newActive(POPJavaJobManager.class, args);
-		System.out.println("[JM] Initialized");
-	}
 
 	@POPObjectDescription(url = "localhost")
-	public POPJavaJobManager() {
-		services = new LinkedList<>();
+	public POPJavaJobManager(ResourceAllocator ra) {
+		allocator = ra;
 	}
 
 	/**
@@ -77,31 +52,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 */
 	@POPAsyncMutex(id = 20)
     public void registerService(ServiceConnector service) {
-		this.services.add(service);
-		// add to counter
-		await.release();
-	}
-	
-	/**
-	 * Return the next host to use. Right now it's a Round-robin but in future
-	 * it could change
-	 *
-	 * @return
-	 */
-	private ServiceConnector getNextHost(ObjectDescriptionInput odi) {
-		try {
-			sync.acquire();
-			// out of bound, reset
-			if(current.get() >= services.size()) {
-				// write request
-				System.out.println(String.format(MSG_ALLOC + " %f %f", odi.getMemoryReq(), odi.getMemoryReq()));
-			}
-			sync.release();
-			await.acquire();
-		} catch (InterruptedException ex) { }
-		
-		// linear allocation
-		return services.get(current.getAndIncrement());
+		allocator.registerService(service);
 	}
 	
 	@Override
@@ -122,15 +73,13 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			ServiceConnector service;
 			for (int i = 0; i < howmany; i++) {
 				// connection info, random from pool
-				service = getNextHost(od);
+				service = allocator.getNextHost(od);
 				// new od
 				nod = POPSystem.getDefaultOD();
 				// set daemon infromations
 				nod.setConnectionType(service.getConnectionType());
 				nod.setHostname(String.format("%s:%d", service.getHostname(), service.getServicePort()));
 				nod.setConnectionSecret(service.getSecret());
-				nod.setPower(od.getPowerMin(), od.getPowerReq());
-				nod.setMemory(od.getMemoryMin(), od.getMemoryReq());
 				// out access point
 				pap = new POPAccessPoint();
 				// taken from Interface.java
