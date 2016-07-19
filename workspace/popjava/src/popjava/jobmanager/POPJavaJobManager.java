@@ -48,7 +48,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	private final AtomicInteger current = new AtomicInteger();
 	
 	private final Semaphore await = new Semaphore(0, true);
-	private final Semaphore sync = new Semaphore(1);
+	private final Semaphore sync = new Semaphore(1, true);
 	
 	public static final String MSG_ALLOC = "[JMC] alloc";
 
@@ -68,6 +68,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 	@POPObjectDescription(url = "localhost")
 	public POPJavaJobManager() {
+		System.out.println("[JM] Created");
 		services = new LinkedList<>();
 	}
 
@@ -90,16 +91,22 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 */
 	private ServiceConnector getNextHost(ObjectDescriptionInput odi) {
 		try {
+			System.out.println("[JM] Acquiring");
 			sync.acquire();
+			System.out.println("[JM] Acquired");
 			// out of bound, reset
 			if(current.get() >= services.size()) {
 				// write request
 				System.out.println(String.format(MSG_ALLOC + " %f %f", odi.getMemoryReq(), odi.getMemoryReq()));
 			}
+			System.out.println("[JM] Releasing");
 			sync.release();
+			System.out.println("[JM] Released");
+			System.out.println("[JM] Acquiring await");
 			await.acquire();
 		} catch (InterruptedException ex) { }
 		
+		System.out.println("[JM] Returning service");
 		// linear allocation
 		return services.get(current.getAndIncrement());
 	}
