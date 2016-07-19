@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import popjava.baseobject.ConnectionType;
+import popjava.jobmanager.ServiceConnector;
 
 import popjava.system.POPJavaConfiguration;
 import popjava.system.POPSystem;
@@ -33,15 +35,15 @@ public class POPJavaDeamon implements Runnable, Closeable{
 	
 	private static final String BACKUP_JAR = "build/jar/popjava.jar";
 	
-	private final DaemonInfo daemonInfo;
+	private final ServiceConnector daemonInfo;
 
-	public POPJavaDeamon(DaemonInfo daemonInfo) {
+	public POPJavaDeamon(ServiceConnector daemonInfo) {
 		this.daemonInfo = daemonInfo;
 		this.daemonInfo.setHostname(POPSystem.getHostIP());
 	}
 	
 	public POPJavaDeamon(String password, int port){
-		this(new DaemonInfo(port, password));
+		this(new ServiceConnector(password, port, ConnectionType.DEAMON));
 	}
         
 	public POPJavaDeamon(String password) {
@@ -91,12 +93,12 @@ public class POPJavaDeamon implements Runnable, Closeable{
 				System.err.println("Execute command: ");
 				
 				
-				String saltedHash = getSaltedHash(salt, daemonInfo.getPassword());
+				String saltedHash = getSaltedHash(salt, daemonInfo.getSecret());
 				
 				//Read command to execute
 				String challengeAnswer = reader.readLine();
 				if(!saltedHash.equals(challengeAnswer)){
-					System.err.println("The supplied secret was wrong : "+challengeAnswer+" should be "+saltedHash+" using password "+daemonInfo.getPassword());
+					System.err.println("The supplied secret was wrong : "+challengeAnswer+" should be "+saltedHash+" using password "+daemonInfo.getSecret());
 					writer.write("ERROR PASS\n");
 					writer.close();
 					reader.close();
@@ -186,11 +188,11 @@ public class POPJavaDeamon implements Runnable, Closeable{
 	 * @throws IOException
 	 */
 	public void start() throws IOException{
-		serverSocket = new ServerSocket(daemonInfo.getPort());
+		serverSocket = new ServerSocket(daemonInfo.getServicePort());
 		
 		// if port was 0, save and propage to references the real port
-		if(daemonInfo.getPort() == 0)
-			daemonInfo.setPort(serverSocket.getLocalPort());
+		if(daemonInfo.getServicePort() == 0)
+			daemonInfo.setServicePort(serverSocket.getLocalPort());
 		
 		Executor executor = Executors.newCachedThreadPool();
 		

@@ -26,7 +26,6 @@ import popjava.dataswaper.ObjectDescriptionInput;
 import popjava.service.POPJavaDeamonConnector;
 import static popjava.interfacebase.Interface.getAppcoreService;
 import static popjava.interfacebase.Interface.getCodeFile;
-import popjava.service.DaemonInfo;
 import popjava.serviceadapter.POPAppService;
 import popjava.system.POPJavaConfiguration;
 import popjava.system.POPSystem;
@@ -68,19 +67,13 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		services = new LinkedList<>();
 	}
 
-//	@POPObjectDescription(url = "localhost")
-//	public POPJavaJobManager(String args) {
-//		// get list of daemons in arguments		
-//		this.services = DaemonInfo.parse(args);
-//	}
-	
 	/**
 	 * Add a new daemon to the available ones
 	 * @param service 
 	 */
 	@POPAsyncMutex(id = 20)
-    public void registerDaemon(String service) {
-		this.services.add(DaemonInfo.fromString(service));
+    public void registerService(ServiceConnector service) {
+		this.services.add(service);
 	}
 	
 	/**
@@ -88,8 +81,8 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * @param service 
 	 */
 	@POPAsyncMutex(id = 21)
-	public void removeDaemon(String service) {
-		services.remove(DaemonInfo.fromString(service));
+	public void removeDaemon(ServiceConnector service) {
+		services.remove(service);
 	}
 
 	/**
@@ -140,6 +133,8 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 				// out access point
 				pap = new POPAccessPoint();
 				// taken from Interface.java
+				
+				// use resource allocator
 				createCmd(objname, pap);
 				if(pap.isEmpty())
 					throw new Exception("Failed to retreive AP");
