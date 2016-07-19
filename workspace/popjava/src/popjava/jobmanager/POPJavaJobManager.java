@@ -41,6 +41,10 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 	private ObjectDescription nod;
 
+	public POPJavaJobManager() {
+		this(null);
+	}
+	
 	@POPObjectDescription(url = "localhost")
 	public POPJavaJobManager(ResourceAllocator ra) {
 		allocator = ra;
