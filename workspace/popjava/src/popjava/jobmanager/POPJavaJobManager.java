@@ -48,7 +48,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	private final AtomicInteger current = new AtomicInteger();
 	
 	private final Semaphore await = new Semaphore(0, true);
-	private final Semaphore sync = new Semaphore(1);
+	private final Semaphore sync = new Semaphore(1, true);
 	
 	public static final String MSG_ALLOC = "[JMC] alloc";
 
