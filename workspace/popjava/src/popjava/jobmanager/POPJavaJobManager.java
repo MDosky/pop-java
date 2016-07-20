@@ -3,6 +3,7 @@ package popjava.jobmanager;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import popjava.PopJava;
 import popjava.annotation.POPAsyncMutex;
 import popjava.annotation.POPClass;
 import popjava.annotation.POPObjectDescription;
@@ -40,15 +41,19 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	private final ResourceAllocator allocator;
 
 	private ObjectDescription nod;
+	
+	private final Class allocatorClass;
 
 	@POPObjectDescription(url = "localhost")
 	public POPJavaJobManager() {
 		allocator = null;
+		allocatorClass = null;
 	}
 	
 	@POPObjectDescription(url = "localhost")
-	public <T extends ResourceAllocator> POPJavaJobManager(T ra) {
-		allocator = ra;
+	public <T extends ResourceAllocator> POPJavaJobManager(Class<T> clazz) {
+		allocator = PopJava.newActive(clazz);
+		allocatorClass = clazz;
 	}
 
 	/**
@@ -58,6 +63,24 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	@POPAsyncMutex(id = 20)
     public void registerService(ServiceConnector service) {
 		allocator.registerService(service);
+	}
+	
+	/**
+	 * Return the allocator class for identification
+	 * @return 
+	 */
+	@POPSyncConc
+	public Class getAllocatorClass() {
+		return allocatorClass;
+	}
+
+	/**
+	 * Return the allocator POPObject
+	 * @return 
+	 */
+	@POPSyncConc
+	public ResourceAllocator getAllocator() {
+		return allocator;
 	}
 	
 	@Override
