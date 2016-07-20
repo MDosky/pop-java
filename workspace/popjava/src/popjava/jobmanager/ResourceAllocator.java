@@ -1,6 +1,5 @@
 package popjava.jobmanager;
 
-import popjava.annotation.POPClass;
 import popjava.dataswaper.ObjectDescriptionInput;
 
 /**
@@ -9,7 +8,6 @@ import popjava.dataswaper.ObjectDescriptionInput;
  * services
  * @author Dosky
  */
-@POPClass
 public interface ResourceAllocator {
 	ServiceConnector getNextHost(ObjectDescriptionInput od);
 	void registerService(ServiceConnector service);
