@@ -41,12 +41,13 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 	private ObjectDescription nod;
 
+	@POPObjectDescription(url = "localhost")
 	public POPJavaJobManager() {
-		this(null);
+		allocator = null;
 	}
 	
 	@POPObjectDescription(url = "localhost")
-	public POPJavaJobManager(ResourceAllocator ra) {
+	public <T extends ResourceAllocator> POPJavaJobManager(T ra) {
 		allocator = ra;
 	}
 
@@ -71,6 +72,10 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		if (howmany <= 0) {
 			return 0;
 		}
+		
+		// error if there is no allocator
+		if (allocator == null)
+			return 1;
 
 		try {
 			POPAccessPoint pap;

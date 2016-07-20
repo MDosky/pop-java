@@ -1,5 +1,6 @@
 package popjava.jobmanager;
 
+import popjava.dataswaper.IPOPBase;
 import popjava.dataswaper.ObjectDescriptionInput;
 
 /**
@@ -8,7 +9,7 @@ import popjava.dataswaper.ObjectDescriptionInput;
  * services
  * @author Dosky
  */
-public interface ResourceAllocator {
+public interface ResourceAllocator extends IPOPBase {
 	ServiceConnector getNextHost(ObjectDescriptionInput od);
 	void registerService(ServiceConnector service);
 }
