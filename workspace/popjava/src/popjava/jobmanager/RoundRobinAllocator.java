@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import popjava.annotation.POPClass;
 import popjava.annotation.POPSyncConc;
 import popjava.annotation.POPSyncSeq;
+import popjava.base.POPObject;
 import popjava.dataswaper.ObjectDescriptionInput;
 
 /**
@@ -15,9 +16,9 @@ import popjava.dataswaper.ObjectDescriptionInput;
  * @author Dosky
  */
 @POPClass
-public class RoundRobinAllocator implements ResourceAllocator {
+public class RoundRobinAllocator extends POPObject implements ResourceAllocator {
 
-	private List<ServiceConnector> services;
+	private final List<ServiceConnector> services;
 
 	private final AtomicInteger currentHost = new AtomicInteger();
 
