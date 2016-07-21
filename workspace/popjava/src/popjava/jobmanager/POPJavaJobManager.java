@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import popjava.PopJava;
+import popjava.annotation.POPAsyncConc;
 import popjava.annotation.POPAsyncMutex;
 import popjava.annotation.POPClass;
 import popjava.annotation.POPConfig;
@@ -72,6 +73,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	/**
 	 * Custom allocator fixed on localhost.
 	 * The given class need to implement ResourceAllocator.
+	 * @param <T>
 	 * @param clazzString The implementation of ResourceAllocator
 	 * @param pap The Access POint the the instantiated RA
 	 * @throws POPException
@@ -88,7 +90,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * Add a new daemon to the available ones
 	 * @param service 
 	 */
-	@POPAsyncMutex(id = 20)
+	@POPAsyncConc(id = 20)
     public void registerService(ServiceConnector service) {
 		allocator.registerService(service);
 	}
