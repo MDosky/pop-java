@@ -48,13 +48,12 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	private final Class allocatorClass;
 
 	/**
-	 * Default R-R implementation on port 2711.
-	 * You have to find a way to register the services though.
+	 * Don't use this. We need it since it's a POPClass.
 	 */
-	@POPObjectDescription(url = "localhost:2711")
+	@POPObjectDescription(url = "localhost")
 	public POPJavaJobManager() {
-		allocator = PopJava.newActive(RoundRobinAllocator.class);
-		allocatorClass = RoundRobinAllocator.class;
+		allocator = null;
+		allocatorClass = null;
 	}
 	
 	/**

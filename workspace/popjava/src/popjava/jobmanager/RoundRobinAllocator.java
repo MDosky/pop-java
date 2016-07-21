@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import popjava.annotation.POPClass;
+import popjava.annotation.POPObjectDescription;
 import popjava.annotation.POPSyncConc;
 import popjava.annotation.POPSyncSeq;
 import popjava.base.POPObject;
@@ -24,6 +25,7 @@ public class RoundRobinAllocator extends POPObject implements ResourceAllocator 
 
     private final Semaphore await = new Semaphore(0, true);
 	
+	@POPObjectDescription(url = "localhost")
 	public RoundRobinAllocator() {
         services = new LinkedList<>();
 	}
