@@ -51,9 +51,9 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	}
 	
 	@POPObjectDescription(url = "localhost")
-	public <T extends ResourceAllocator> POPJavaJobManager(Class<T> clazz, POPAccessPoint pap) {
-		allocator = PopJava.newActive(clazz, pap);
-		allocatorClass = clazz;
+	public POPJavaJobManager(String clazz, POPAccessPoint pap) throws POPException, ClassNotFoundException {
+		allocator = (ResourceAllocator) PopJava.newActive(clazz, pap);
+		allocatorClass = Class.forName(clazz);
 	}
 
 	/**
