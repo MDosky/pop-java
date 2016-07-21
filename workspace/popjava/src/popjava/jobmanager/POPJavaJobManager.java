@@ -46,8 +46,8 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 
 	@POPObjectDescription(url = "localhost")
 	public POPJavaJobManager() {
-		allocator = null;
-		allocatorClass = null;
+		allocator = PopJava.newActive(RoundRobinAllocator.class);
+		allocatorClass = RoundRobinAllocator.class;
 	}
 	
 	@POPObjectDescription(url = "localhost")
