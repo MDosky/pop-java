@@ -4,9 +4,15 @@ import java.util.Objects;
 import popjava.baseobject.ConnectionType;
 import popjava.buffer.POPBuffer;
 import popjava.dataswaper.IPOPBase;
+import popjava.system.POPSystem;
 
 /**
- *
+ * This class describe a connection to an host for the creation of an
+ * object. How it's used is up the the actual implementation.
+ * If the port is set to 0 if should usually be manually set to actual used
+ * port afterwards.
+ * The hostname will try to be determined by itself but just in case it should 
+ * be set by hand.
  * @author Dosky
  */
 public class ServiceConnector implements IPOPBase {
@@ -17,7 +23,7 @@ public class ServiceConnector implements IPOPBase {
 	private ConnectionType connectionType;
 
 	public ServiceConnector() {
-		this("localhost");
+		this(POPSystem.getHostIP());
 	}
 
 	public ServiceConnector(String secret) {

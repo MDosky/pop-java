@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import popjava.PopJava;
 import popjava.annotation.POPAsyncMutex;
 import popjava.annotation.POPClass;
+import popjava.annotation.POPConfig;
 import popjava.annotation.POPObjectDescription;
 import popjava.annotation.POPParameter;
 import popjava.annotation.POPSyncConc;
@@ -32,8 +33,10 @@ import popjava.util.SystemUtil;
 import popjava.util.Util;
 
 /**
- * Start a centralized JobManager which use the POPJavaDeamon class to create
+ * A centralized JobManager which use the POPJavaDeamon class to create
  * remote objects.
+ * @author Dosky
+ * @see Interface.java regarding the remote object creation
  */
 @POPClass(classId = 99924, deconstructor = false, isDistributable = true)
 public class POPJavaJobManager extends POPObject implements JobManagerService {
@@ -44,12 +47,37 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	
 	private final Class allocatorClass;
 
-	@POPObjectDescription(url = "localhost")
+	/**
+	 * Default R-R implementation on port 2711.
+	 * You have to find a way to register the services though.
+	 */
+	@POPObjectDescription(url = "localhost:2711")
 	public POPJavaJobManager() {
 		allocator = PopJava.newActive(RoundRobinAllocator.class);
 		allocatorClass = RoundRobinAllocator.class;
 	}
 	
+	/**
+	 * Usually for a custom Allocator, the URL parameter is to set the port.
+	 * The given class need to implement ResourceAllocator.
+	 * @param url The url the JM will be created
+	 * @param clazzString The implementation of ResourceAllocator
+	 * @param pap The Access POint the the instantiated RA
+	 * @throws POPException
+	 * @throws ClassNotFoundException 
+	 */
+	public POPJavaJobManager(@POPConfig(POPConfig.Type.URL) String url, String clazzString, POPAccessPoint pap) throws POPException, ClassNotFoundException {
+		this(clazzString, pap);
+	}
+	
+	/**
+	 * Custom allocator fixed on localhost.
+	 * The given class need to implement ResourceAllocator.
+	 * @param clazzString The implementation of ResourceAllocator
+	 * @param pap The Access POint the the instantiated RA
+	 * @throws POPException
+	 * @throws ClassNotFoundException 
+	 */
 	@POPObjectDescription(url = "localhost")
 	public <T extends ResourceAllocator> POPJavaJobManager(String clazzString, POPAccessPoint pap) throws POPException, ClassNotFoundException {
 		Class<T> clazz = (Class<T>) Class.forName(clazzString);
