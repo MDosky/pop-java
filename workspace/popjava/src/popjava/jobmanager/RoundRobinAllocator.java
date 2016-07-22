@@ -23,35 +23,39 @@ public class RoundRobinAllocator extends POPObject implements ResourceAllocator 
 
 	private final AtomicInteger currentHost = new AtomicInteger();
 
-    private final Semaphore await = new Semaphore(0, true);
-	
+	private final Semaphore await = new Semaphore(0, true);
+
 	@POPObjectDescription(url = "localhost")
 	public RoundRobinAllocator() {
-        services = new LinkedList<>();
+		services = new LinkedList<>();
 	}
 
 	@Override
-    @POPSyncSeq
+	@POPSyncSeq
 	public ServiceConnector getNextHost(ObjectDescriptionInput od) {
-		if(services.isEmpty())
+		if (services.isEmpty()) {
 			try {
 				await.acquire();
-			} catch (InterruptedException ex) { }
-		
-		// out of bound, go to first service
-		if(currentHost.get() >= services.size())
-			currentHost.set(0);
+			} catch (InterruptedException ex) {
+			}
+		}
 
-        // linear allocation
-        return services.get(currentHost.getAndIncrement());
+		// out of bound, go to first service
+		if (currentHost.get() >= services.size()) {
+			currentHost.set(0);
+		}
+
+		// linear allocation
+		return services.get(currentHost.getAndIncrement());
 	}
 
 	@Override
-    @POPSyncConc
+	@POPSyncConc
 	public void registerService(ServiceConnector service) {
-		if(services.isEmpty())
+		if (services.isEmpty()) {
 			await.release();
-        services.add(service);
+		}
+		services.add(service);
 	}
 
 }
