@@ -218,7 +218,6 @@ public class ComboxSocket extends Combox {
 				LogWriter.writeDebugInfo("ComboxSocket Error while receiving data:"
 								+ e.getMessage());
 			}
-			e.printStackTrace();
 			close();
 			return -2;
 		}

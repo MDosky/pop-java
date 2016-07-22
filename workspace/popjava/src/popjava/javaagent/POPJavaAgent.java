@@ -66,7 +66,7 @@ public final class POPJavaAgent implements ClassFileTransformer{
         IGNORED.add("javax.");
         IGNORED.add("org.w3c.");
         IGNORED.add("org.xml.");
-		IGNORED.add("org.apache.");
+        IGNORED.add("org.apache.");
         IGNORED.add("javax.");      
         IGNORED.add("org.netbeans.");
     }

@@ -39,9 +39,7 @@ public class ComboxReceiveRequestSocket implements Runnable {
 		this.broker = broker;
 		this.requestQueue = requestQueue;
 		combox = new ComboxSocket(socket);		
-		s = socket;
 	}
-	private Socket s;
 
 	/**
 	 * Start the thread 

@@ -1,6 +1,5 @@
 package popjava.serviceadapter;
 
-import java.util.Arrays;
 import popjava.annotation.POPAsyncConc;
 import popjava.annotation.POPAsyncSeq;
 import popjava.annotation.POPClass;

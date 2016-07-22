@@ -43,7 +43,7 @@ import popjava.util.Util.OSType;
 public class POPSystem {
 	private static POPRemoteLogThread prlt;
 	private static String platform = "linux";
-	public static boolean initialized = false;
+	private static boolean initialized = false;
 	
 	/**
 	 * POP-Java location environement variable name
@@ -230,18 +230,7 @@ public class POPSystem {
 			argvList.add(str);
 		}
 		initialize(argvList);
-		
-//		if(args.length > 0){
-//			if(args[0].startsWith("-codeconf=")) {
-//				String[] tmpArg = new String[args.length-1];
-//				for (int i = 0; i < tmpArg.length; i++) {
-//					tmpArg[i] = args[i+1];
-//				}
-//				args = tmpArg;
-//			}
-//			
-//        }
-		
+				
 		// use "clean" argvList as new args
 		return argvList.toArray(new String[0]);
 	}

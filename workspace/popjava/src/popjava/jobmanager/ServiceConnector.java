@@ -86,7 +86,7 @@ public class ServiceConnector implements IPOPBase {
 
 	@Override
 	public int hashCode() {
-		int hash = 7;
+		int hash = 4523;
 		hash = 37 * hash + Objects.hashCode(this.hostname);
 		hash = 37 * hash + Objects.hashCode(this.secret);
 		hash = 37 * hash + this.servicePort;
