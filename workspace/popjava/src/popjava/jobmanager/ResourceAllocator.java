@@ -1,8 +1,6 @@
 package popjava.jobmanager;
 
 import popjava.annotation.POPClass;
-import popjava.annotation.POPSyncConc;
-import popjava.annotation.POPSyncSeq;
 import popjava.dataswaper.ObjectDescriptionInput;
 
 /**
@@ -20,7 +18,6 @@ public class ResourceAllocator {
 	 * @param od
 	 * @return 
 	 */
-    @POPSyncSeq
 	ServiceConnector getNextHost(ObjectDescriptionInput od) {
 		return null;
 	}
@@ -30,7 +27,6 @@ public class ResourceAllocator {
 	 * call this method
 	 * @param service 
 	 */
-    @POPSyncConc
 	void registerService(ServiceConnector service) {
 	}
 }
