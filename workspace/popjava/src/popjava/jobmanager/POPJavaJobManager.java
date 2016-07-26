@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import popjava.PopJava;
 import popjava.annotation.POPAsyncConc;
+import popjava.annotation.POPAsyncMutex;
 import popjava.annotation.POPClass;
 import popjava.annotation.POPConfig;
 import popjava.annotation.POPObjectDescription;
@@ -12,6 +13,7 @@ import popjava.annotation.POPParameter;
 import popjava.annotation.POPSyncConc;
 import popjava.base.POPErrorCode;
 import popjava.base.POPException;
+import popjava.base.POPObject;
 import popjava.baseobject.ObjectDescription;
 import popjava.baseobject.POPAccessPoint;
 import popjava.broker.Broker;
@@ -37,8 +39,8 @@ import popjava.util.Util;
  * @author Dosky
  * @see Interface.java regarding the remote object creation
  */
-@POPClass
-public class POPJavaJobManager implements JobManagerService {
+@POPClass(classId = 99924, deconstructor = false, isDistributable = true)
+public class POPJavaJobManager extends POPObject implements JobManagerService {
 	
 	private final ResourceAllocator allocator;
 
@@ -64,8 +66,8 @@ public class POPJavaJobManager implements JobManagerService {
 	 * @throws POPException
 	 * @throws ClassNotFoundException 
 	 */
-	public POPJavaJobManager(@POPConfig(POPConfig.Type.URL) String url, ResourceAllocator ra) throws POPException, ClassNotFoundException {
-		this(ra);
+	public POPJavaJobManager(@POPConfig(POPConfig.Type.URL) String url, String clazzString, POPAccessPoint pap) throws POPException, ClassNotFoundException {
+		this(clazzString, pap);
 	}
 	
 	/**
@@ -78,9 +80,10 @@ public class POPJavaJobManager implements JobManagerService {
 	 * @throws ClassNotFoundException 
 	 */
 	@POPObjectDescription(url = "localhost")
-	public POPJavaJobManager(ResourceAllocator ra) {
-		allocator = ra;
-		allocatorClass = ra.getClass();
+	public <T extends ResourceAllocator> POPJavaJobManager(String clazzString, POPAccessPoint pap) throws POPException, ClassNotFoundException {
+		Class<T> clazz = (Class<T>) Class.forName(clazzString);
+		allocator = PopJava.newActive(clazz, pap);
+		allocatorClass = clazz;
 	}
 
 	/**
@@ -300,7 +303,7 @@ public class POPJavaJobManager implements JobManagerService {
 			argvList.add(appString);
 		}
 		// always use this job manager for every object
-		String jobString = String.format("-jobservice=%s", PopJava.getAccessPoint(this).toString());
+		String jobString = String.format("-jobservice=%s", getAccessPoint().toString());
 		argvList.add(jobString);
 		
 		// remove codelocation
@@ -360,10 +363,6 @@ public class POPJavaJobManager implements JobManagerService {
 		}
 		allocateCombox.close();
 		return result;
-	}
-
-	@Override
-	public void exit() {
 	}
 
 }

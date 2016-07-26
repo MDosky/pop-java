@@ -58,22 +58,7 @@ public final class POPJavaAgent implements ClassFileTransformer{
         instrumentation.addTransformer( this );
         
         //TODO: make a more complete list
-		// Selective POP Java exclusions
-        IGNORED.add("popjava.annotation");
-        IGNORED.add("popjava.base");
-        IGNORED.add("popjava.broker");
-        IGNORED.add("popjava.buffer");
-        IGNORED.add("popjava.codemanager");
-        IGNORED.add("popjava.combox");
-        IGNORED.add("popjava.dataswaper");
-        IGNORED.add("popjava.interfacebase");
-        IGNORED.add("popjava.javaagent");
-        IGNORED.add("popjava.mapgen");
-        IGNORED.add("popjava.scripts");
-        IGNORED.add("popjava.service");
-        IGNORED.add("popjava.system");
-        IGNORED.add("popjava.util");
-		
+        IGNORED.add("popjava.");
         IGNORED.add("com.sun.");
         IGNORED.add("sun.");
         IGNORED.add("javassist.");

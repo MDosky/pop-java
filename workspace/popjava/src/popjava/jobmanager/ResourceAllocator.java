@@ -1,6 +1,5 @@
 package popjava.jobmanager;
 
-import popjava.annotation.POPClass;
 import popjava.dataswaper.ObjectDescriptionInput;
 
 /**
@@ -9,8 +8,7 @@ import popjava.dataswaper.ObjectDescriptionInput;
  *
  * @author Dosky
  */
-@POPClass
-public class ResourceAllocator {
+public interface ResourceAllocator {
 	/**
 	 * This method should return new next Service the object should
 	 * connect to, an OD is given in case we want to handle its 
@@ -18,15 +16,12 @@ public class ResourceAllocator {
 	 * @param od
 	 * @return 
 	 */
-	ServiceConnector getNextHost(ObjectDescriptionInput od) {
-		return null;
-	}
+	ServiceConnector getNextHost(ObjectDescriptionInput od);
 	
 	/**
 	 * This method register a service for latter use, the JM usually
 	 * call this method
 	 * @param service 
 	 */
-	void registerService(ServiceConnector service) {
-	}
+	void registerService(ServiceConnector service);
 }
