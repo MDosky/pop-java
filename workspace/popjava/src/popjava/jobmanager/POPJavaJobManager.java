@@ -59,8 +59,9 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * Usually for a custom Allocator, the URL parameter is to set the port.
 	 * The given class need to implement ResourceAllocator.
 	 * @param url The url the JM will be created
+	 * @param ra
 	 */
-	public POPJavaJobManager(@POPConfig(POPConfig.Type.URL) String url, ResourceAllocator ra) throws POPException, ClassNotFoundException {
+	public POPJavaJobManager(@POPConfig(POPConfig.Type.URL) String url, @POPParameter(POPParameter.Direction.INOUT) ResourceAllocator ra) throws POPException, ClassNotFoundException {
 		this(ra);
 	}
 	
@@ -70,7 +71,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * @param ra
 	 */
 	@POPObjectDescription(url = "localhost")
-	public POPJavaJobManager(ResourceAllocator ra) {
+	public POPJavaJobManager(@POPParameter(POPParameter.Direction.INOUT) ResourceAllocator ra) {
 		allocator = ra;
 		allocatorClass = ra.getClass();
 	}
