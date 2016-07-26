@@ -8,6 +8,7 @@ import popjava.annotation.POPClass;
 import popjava.annotation.POPObjectDescription;
 import popjava.annotation.POPSyncConc;
 import popjava.annotation.POPSyncSeq;
+import popjava.base.POPObject;
 import popjava.dataswaper.ObjectDescriptionInput;
 
 /**
@@ -16,7 +17,7 @@ import popjava.dataswaper.ObjectDescriptionInput;
  * @author Dosky
  */
 @POPClass
-public class RoundRobinAllocator extends ResourceAllocator {
+public class RoundRobinAllocator extends POPObject implements ResourceAllocator {
 
 	private final List<ServiceConnector> services;
 
