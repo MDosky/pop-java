@@ -3,9 +3,7 @@ package popjava.jobmanager;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import popjava.PopJava;
 import popjava.annotation.POPAsyncConc;
-import popjava.annotation.POPAsyncMutex;
 import popjava.annotation.POPClass;
 import popjava.annotation.POPConfig;
 import popjava.annotation.POPObjectDescription;
@@ -61,29 +59,20 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	 * Usually for a custom Allocator, the URL parameter is to set the port.
 	 * The given class need to implement ResourceAllocator.
 	 * @param url The url the JM will be created
-	 * @param clazzString The implementation of ResourceAllocator
-	 * @param pap The Access POint the the instantiated RA
-	 * @throws POPException
-	 * @throws ClassNotFoundException 
 	 */
-	public POPJavaJobManager(@POPConfig(POPConfig.Type.URL) String url, String clazzString, POPAccessPoint pap) throws POPException, ClassNotFoundException {
-		this(clazzString, pap);
+	public POPJavaJobManager(@POPConfig(POPConfig.Type.URL) String url, ResourceAllocator ra) throws POPException, ClassNotFoundException {
+		this(ra);
 	}
 	
 	/**
 	 * Custom allocator fixed on localhost.
 	 * The given class need to implement ResourceAllocator.
-	 * @param <T>
-	 * @param clazzString The implementation of ResourceAllocator
-	 * @param pap The Access POint the the instantiated RA
-	 * @throws POPException
-	 * @throws ClassNotFoundException 
+	 * @param ra
 	 */
 	@POPObjectDescription(url = "localhost")
-	public <T extends ResourceAllocator> POPJavaJobManager(String clazzString, POPAccessPoint pap) throws POPException, ClassNotFoundException {
-		Class<T> clazz = (Class<T>) Class.forName(clazzString);
-		allocator = PopJava.newActive(clazz, pap);
-		allocatorClass = clazz;
+	public POPJavaJobManager(ResourceAllocator ra) {
+		allocator = ra;
+		allocatorClass = ra.getClass();
 	}
 
 	/**
