@@ -17,7 +17,7 @@ import popjava.dataswaper.ObjectDescriptionInput;
  * @author Dosky
  */
 @POPClass
-public class RoundRobinAllocator extends POPObject implements ResourceAllocator {
+public class RoundRobinAllocator extends ResourceAllocator {
 
 	private final List<ServiceConnector> services;
 
