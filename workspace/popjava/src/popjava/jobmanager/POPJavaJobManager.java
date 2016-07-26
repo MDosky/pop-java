@@ -39,7 +39,7 @@ import popjava.util.Util;
  * @see Interface.java regarding the remote object creation
  */
 @POPClass(classId = 99924, deconstructor = false, isDistributable = true)
-public class POPJavaJobManager extends POPObject implements JobManagerService {
+public class POPJavaJobManager implements JobManagerService {
 	
 	private final ResourceAllocator allocator;
 
@@ -302,7 +302,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			argvList.add(appString);
 		}
 		// always use this job manager for every object
-		String jobString = String.format("-jobservice=%s", getAccessPoint().toString());
+		String jobString = String.format("-jobservice=%s", PopJava.getAccessPoint(this).toString());
 		argvList.add(jobString);
 		
 		// remove codelocation
@@ -362,6 +362,10 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		}
 		allocateCombox.close();
 		return result;
+	}
+
+	@Override
+	public void exit() {
 	}
 
 }
