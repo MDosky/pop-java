@@ -232,7 +232,6 @@ public class Interface {
         		jobManager = PopJava.newActive(POPJavaJobManager.class, jobContact);
 			}
         } catch(Exception e) {
-        	e.printStackTrace();
         }
         
         if(jobManager == null){
