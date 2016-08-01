@@ -23,7 +23,7 @@ public class ServiceConnector implements IPOPBase {
 	private ConnectionType connectionType;
 
 	public ServiceConnector() {
-		this(POPSystem.getHostIP());
+		this("");
 	}
 
 	public ServiceConnector(String secret) {
@@ -35,7 +35,7 @@ public class ServiceConnector implements IPOPBase {
 	}
 
 	public ServiceConnector(String secret, int servicePort, ConnectionType connectionType) {
-		this.hostname = "localhost";
+		this.hostname = POPSystem.getHostIP();
 		this.secret = secret;
 		this.servicePort = servicePort;
 		this.connectionType = connectionType;

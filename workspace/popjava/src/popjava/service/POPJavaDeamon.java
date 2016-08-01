@@ -39,6 +39,7 @@ public class POPJavaDeamon implements Runnable, Closeable{
 
 	public POPJavaDeamon(ServiceConnector daemonInfo) {
 		this.daemonInfo = daemonInfo;
+		this.daemonInfo.setConnectionType(ConnectionType.DEAMON);
 		this.daemonInfo.setHostname(POPSystem.getHostIP());
 	}
 	
