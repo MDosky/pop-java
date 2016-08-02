@@ -672,7 +672,7 @@ public class Interface {
 			argvList.add(appString);
 		}
 		if (jobserv != null && !jobserv.isEmpty()) {
-			String jobString = String.format("-jobservice=%s", jobserv.toString());
+			String jobString = String.format(Broker.JOBSERVICE_PREFIX+"%s", jobserv.toString());
 			argvList.add(jobString);
 		}
 
