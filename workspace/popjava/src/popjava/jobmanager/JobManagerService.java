@@ -16,4 +16,8 @@ public interface JobManagerService {
 		ObjectDescriptionInput od, int howmany, POPAccessPoint[] objcontacts, int howmany2, POPAccessPoint[] remotejobcontacts);
 	
 	void exit();
+	
+//	void signalCreateObject(long identifier);
+//	void signalReleaseObject(long identifier);
+//	int objectReport(long identifier);
 }

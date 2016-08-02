@@ -244,11 +244,13 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	}
 
 	private static String getPOPCodeFile() {
+		String popPath = POPJavaConfiguration.getClassPath();
+		String popJar = POPJavaConfiguration.getPopJavaJar();
 
 		return String.format(
-			POPJavaConfiguration.getBrokerCommand(),
-			"popjava.jar",
-			"popjava.jar:pop-app.jar");
+				POPJavaConfiguration.getBrokerCommand(),
+				popJar,
+				popPath);
 	}
 
 	/**
@@ -303,7 +305,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 			argvList.add(appString);
 		}
 		// always use this job manager for every object
-		String jobString = String.format("-jobservice=%s", getAccessPoint().toString());
+		String jobString = String.format(Broker.JOBSERVICE_PREFIX + "%s", getAccessPoint().toString());
 		argvList.add(jobString);
 		
 		// remove codelocation
