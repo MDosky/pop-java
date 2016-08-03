@@ -710,8 +710,9 @@ public final class Broker {
 		
 		LogWriter.writeDebugInfo("Close connection, left "+connectionCount+" "+source);
 		if (connectionCount <= 0){
+			System.out.println("[Broker] Closing");
 			setState(Broker.EXIT);
-			
+			System.out.println("[Broker] Contacting JM");
 			// contact JM if possible
 			JobManagerService jobManager;
 			if(POPSystem.jobService != null) {
