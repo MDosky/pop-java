@@ -94,8 +94,8 @@ public class ComboxReceiveRequestSocket implements Runnable {
 	 * Close the current connection
 	 */
 	public void close() {
+		broker.onCloseConnection(hashCode() + " " +combox.peerConnection.getLocalPort()+" "+combox.peerConnection.getPort());
 	    if(combox != null){
-	        broker.onCloseConnection(hashCode() + " " +combox.peerConnection.getLocalPort()+" "+combox.peerConnection.getPort());
 	        combox.close();
 	        combox = null;
 	    }
