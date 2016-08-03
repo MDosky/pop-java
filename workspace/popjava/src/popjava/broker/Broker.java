@@ -711,6 +711,26 @@ public final class Broker {
 		LogWriter.writeDebugInfo("Close connection, left "+connectionCount+" "+source);
 		if (connectionCount <= 0){
 			setState(Broker.EXIT);
+			
+			// contact JM if possible
+			JobManagerService jobManager;
+			if(POPSystem.jobService != null) {
+				// get JM
+				try {
+					if(Configuration.CONNECT_TO_POPCPP){
+						jobManager = PopJava.newActive(POPJobService.class, POPSystem.jobService);
+					} else {
+						jobManager = PopJava.newActive(POPJavaJobManager.class, POPSystem.jobService);
+					}
+
+					// increment machine counter
+					System.out.format("[Broker] JM dec %d for %d - 1\n", jobManager.objectReport(SystemUtil.machineIdentifier()), SystemUtil.machineIdentifier());
+					jobManager.signalReleaseObject(SystemUtil.machineIdentifier());
+
+					jobManager.exit();
+				} catch(Exception e) {
+				}
+			}
 		}
 	}
 
@@ -918,26 +938,20 @@ public final class Broker {
 				} else {
 					jobManager = PopJava.newActive(POPJavaJobManager.class, POPSystem.jobService);
 				}
+				
+				// increment machine counter
+				jobManager.signalCreateObject(SystemUtil.machineIdentifier());
+
+				// debug report
+				System.out.format("[Broker] JM inc %d for %d\n", jobManager.objectReport(SystemUtil.machineIdentifier()), SystemUtil.machineIdentifier());
+				
+				jobManager.exit();
 			} catch(Exception e) {
 			}
 		}
 		
-		// increment
-		if(jobManager != null) {
-			// increment machine counter
-			jobManager.signalCreateObject(SystemUtil.machineIdentifier());
-
-			// debug report
-			System.out.format("[Broker] JM inc %d for %d\n", jobManager.objectReport(SystemUtil.machineIdentifier()), SystemUtil.machineIdentifier());
-		}
-
 		if (status == 0 && broker != null){
 			broker.treatRequests();
-		}
-		
-		if(jobManager != null) {
-			System.out.format("[Broker] JM dec %d for %d - 1\n", jobManager.objectReport(SystemUtil.machineIdentifier()), SystemUtil.machineIdentifier());
-			jobManager.signalReleaseObject(SystemUtil.machineIdentifier());
 		}
 		
 		LogWriter.writeDebugInfo("End broker life : "+objectName);
