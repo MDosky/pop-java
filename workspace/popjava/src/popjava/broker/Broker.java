@@ -714,7 +714,7 @@ public final class Broker {
 		if (connectionCount <= 0){
 			setState(Broker.EXIT);
 		
-			System.out.println("[Broker] treatRequests ended");
+			System.out.println("[Broker] closing " + jobServiceAP);
 			// contact JM if possible
 			JobManagerService jobManager;
 			if(jobServiceAP != null) {
@@ -727,7 +727,7 @@ public final class Broker {
 					}
 
 					// increment machine counter
-					System.out.format("[Broker] JM dec %d for %d - 1\n", jobManager.objectReport(SystemUtil.machineIdentifier()), SystemUtil.machineIdentifier());
+					System.out.format("[Broker] JM dec %d for %d - 1 as \n", jobManager.objectReport(SystemUtil.machineIdentifier()), SystemUtil.machineIdentifier(), this);
 					jobManager.signalReleaseObject(SystemUtil.machineIdentifier());
 
 					jobManager.exit();
@@ -881,7 +881,7 @@ public final class Broker {
 		String jobService = Util.removeStringFromList(argvList, 
 				JOBSERVICE_PREFIX);
 		if(jobService != null && !jobService.isEmpty())
-			POPSystem.jobService = new POPAccessPoint(jobService);
+			POPSystem.jobService.setAccessString(jobService);
 		if (actualObjectName != null && actualObjectName.length() > 0) {
 			objectName = actualObjectName;
 		}
@@ -934,6 +934,7 @@ public final class Broker {
 		
 		JobManagerService jobManager = null;
 		jobServiceAP = POPSystem.jobService;
+		System.out.println("[Broker]  connecting " + jobServiceAP );
 		// contact JM if possible
 		if(jobServiceAP != null) {
 			// get JM
@@ -948,7 +949,7 @@ public final class Broker {
 				jobManager.signalCreateObject(SystemUtil.machineIdentifier());
 
 				// debug report
-				System.out.format("[Broker] JM inc %d for %d\n", jobManager.objectReport(SystemUtil.machineIdentifier()), SystemUtil.machineIdentifier());
+				System.out.format("[Broker] JM inc %d for %d as %s\n", jobManager.objectReport(SystemUtil.machineIdentifier()), SystemUtil.machineIdentifier(), broker);
 				
 				jobManager.exit();
 			} catch(Exception e) {
