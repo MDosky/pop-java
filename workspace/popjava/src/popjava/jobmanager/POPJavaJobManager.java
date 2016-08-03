@@ -140,7 +140,10 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	@POPSyncConc
 	public void signalReleaseObject(int identifier) {
 		// get counter
-		AtomicInteger refs = runningObjects.getOrDefault(identifier, new AtomicInteger());
+		AtomicInteger refs = runningObjects.get(identifier);
+		if(refs == null)
+			return;
+		
 		// decrement
 		refs.decrementAndGet();
 		
@@ -150,8 +153,10 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	@Override
 	@POPSyncConc
 	public int objectReport(int identifier) {
-		System.out.println("[JMD] Req from " + identifier + " con " + runningObjects.getOrDefault(identifier, new AtomicInteger()).get());
-		return runningObjects.getOrDefault(identifier, new AtomicInteger()).get();
+		AtomicInteger refs = runningObjects.get(identifier);
+		if(refs == null)
+			return 0;
+		return refs.get();
 	}
 	
 	@Override
