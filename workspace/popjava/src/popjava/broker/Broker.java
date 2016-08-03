@@ -825,8 +825,7 @@ public final class Broker {
 				}
 			}
 			
-			AccessPoint ap = new AccessPoint(factory.getComboxName(),
-					POPSystem.getHostIP(), iPort);
+			AccessPoint ap = new AccessPoint(factory.getComboxName(), POPSystem.getHostIP(), iPort);
 			accessPoint.addAccessPoint(ap);
 			
 			comboxServer = factory.createServerCombox(ap, buffer, this);

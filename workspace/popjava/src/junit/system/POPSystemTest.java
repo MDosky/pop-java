@@ -23,7 +23,8 @@ public class POPSystemTest {
 		assertNotSame("127.0.0.1", ip);
 	}
 	
-
+	
+	
 	@Test
 	public void testClassId(){
 		POPAppService service = new POPAppService();
