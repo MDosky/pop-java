@@ -713,28 +713,6 @@ public final class Broker {
 		LogWriter.writeDebugInfo("Close connection, left "+connectionCount+" "+source);
 		if (connectionCount <= 0){
 			setState(Broker.EXIT);
-		
-			System.out.println("[Broker] closing " + jobServiceAP);
-			// contact JM if possible
-			JobManagerService jobManager;
-			if(jobServiceAP != null) {
-				// get JM
-				try {
-					if(Configuration.CONNECT_TO_POPCPP){
-						jobManager = PopJava.newActive(POPJobService.class, jobServiceAP);
-					} else {
-						jobManager = PopJava.newActive(POPJavaJobManager.class, jobServiceAP);
-					}
-
-					// increment machine counter
-					System.out.format("[Broker] JM dec %d for %d - 1 as \n", jobManager.objectReport(SystemUtil.machineIdentifier()), SystemUtil.machineIdentifier(), this);
-					jobManager.signalReleaseObject(SystemUtil.machineIdentifier());
-
-					jobManager.exit();
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 
@@ -933,8 +911,7 @@ public final class Broker {
 		}
 		
 		JobManagerService jobManager = null;
-		jobServiceAP = POPSystem.jobService;
-		System.out.println("[Broker]  connecting " + jobServiceAP );
+		jobServiceAP = new POPAccessPoint(POPSystem.jobService.toString());
 		// contact JM if possible
 		if(jobServiceAP != null) {
 			// get JM
@@ -947,10 +924,6 @@ public final class Broker {
 				
 				// increment machine counter
 				jobManager.signalCreateObject(SystemUtil.machineIdentifier());
-
-				// debug report
-				System.out.format("[Broker] JM inc %d for %d as %s\n", jobManager.objectReport(SystemUtil.machineIdentifier()), SystemUtil.machineIdentifier(), broker);
-				
 				jobManager.exit();
 			} catch(Exception e) {
 			}
@@ -958,6 +931,24 @@ public final class Broker {
 		
 		if (status == 0 && broker != null){
 			broker.treatRequests();
+		}
+		
+		
+		// contact JM if possible
+		if(jobServiceAP != null) {
+			// get JM
+			try {
+				if(Configuration.CONNECT_TO_POPCPP){
+					jobManager = PopJava.newActive(POPJobService.class, jobServiceAP);
+				} else {
+					jobManager = PopJava.newActive(POPJavaJobManager.class, jobServiceAP);
+				}
+
+				// increment machine counter
+				jobManager.signalReleaseObject(SystemUtil.machineIdentifier());
+				jobManager.exit();
+			} catch(Exception e) {
+			}
 		}
 		
 		LogWriter.writeDebugInfo("End broker life : "+objectName);
