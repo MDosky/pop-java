@@ -45,6 +45,19 @@ public class POPJobService extends POPServiceBase implements JobManagerService {
 		return 0;
 	}
 
+	@Override
+	public void signalCreateObject(int identifier) {
+	}
+
+	@Override
+	public void signalReleaseObject(int identifier) {
+	}
+
+	@Override
+	public int objectReport(int identifier) {
+		return -1;
+	}
+
 
 
 }

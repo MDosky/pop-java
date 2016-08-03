@@ -3,9 +3,12 @@ package popjava.jobmanager;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import popjava.PopJava;
 import popjava.annotation.POPAsyncConc;
-import popjava.annotation.POPAsyncMutex;
 import popjava.annotation.POPClass;
 import popjava.annotation.POPConfig;
 import popjava.annotation.POPObjectDescription;
@@ -42,12 +45,17 @@ import popjava.util.Util;
 @POPClass(classId = 99924, deconstructor = false, isDistributable = true)
 public class POPJavaJobManager extends POPObject implements JobManagerService {
 	
+	// the allocator currently used
 	private final ResourceAllocator allocator;
+	// the allocator class, just in case
+	private final Class allocatorClass;
+	
+	// running objects, map
+	private final Map<Integer, AtomicInteger> runningObjects = Collections.synchronizedMap(new HashMap<>());
 
+	// ObjectDescription used for creation
 	private ObjectDescription nod;
 	
-	private final Class allocatorClass;
-
 	/**
 	 * Don't use this. We need it since it's a POPClass.
 	 */
@@ -111,6 +119,34 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	@POPSyncConc
 	public ResourceAllocator getAllocator() {
 		return allocator;
+	}
+
+	@Override
+	@POPSyncConc
+	public void signalCreateObject(int identifier) {
+		// get counter
+		AtomicInteger refs = runningObjects.getOrDefault(identifier, new AtomicInteger());
+		// increment
+		refs.incrementAndGet();
+		
+		// add to map if necessary
+		if(runningObjects.containsKey(identifier))
+			runningObjects.put(identifier, refs);
+	}
+
+	@Override
+	@POPSyncConc
+	public void signalReleaseObject(int identifier) {
+		// get counter
+		AtomicInteger refs = runningObjects.getOrDefault(identifier, new AtomicInteger());
+		// decrement
+		refs.decrementAndGet();
+	}
+
+	@Override
+	@POPSyncConc
+	public int objectReport(int identifier) {
+		return runningObjects.getOrDefault(identifier, new AtomicInteger()).get();
 	}
 	
 	@Override

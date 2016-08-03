@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
+import popjava.system.POPSystem;
 
 /**
  * This glass gives some static method to deal with the system
@@ -16,6 +18,22 @@ import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
 public class SystemUtil {
 	
 	private static List<Process> processes = new ArrayList<Process>();
+	
+	// setup unique identifier
+	private static final int IDENTIFIER;
+	static {
+		// manually decided
+		String var = System.getenv("POP_ID");
+		// YARN specific
+		if(var == null || var.isEmpty())
+			var = System.getenv("CONTAINER_ID");
+		// fallback to machine IP
+		if(var == null || var.isEmpty())
+			var = POPSystem.getHostIP();
+		
+		// integer identifier is the hash, it's always the same for strings
+		IDENTIFIER = Objects.hashCode(var);
+	}
 
 	public static void endAllChildren(){
 		for(int i = 0; i < processes.size(); i++){
@@ -24,6 +42,17 @@ public class SystemUtil {
 				process.destroy();
 			}
 		}
+	}
+	
+	/**
+	 * Return a unique identifier for the machine.
+	 * It can be manually set by setting the environment variable POP_ID.
+	 * When running inside Hadoop YARN the environment variable CONTAINER_ID is used.
+	 * In case nothing has been manually set, the machine IP address is used.
+	 * @return An unique integer representing the machine
+	 */
+	public static int machineIdentifier() {
+		return IDENTIFIER;
 	}
 	
 	/**
