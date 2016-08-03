@@ -712,7 +712,7 @@ public final class Broker {
 		if (connectionCount <= 0){
 			System.out.println("[Broker] Closing");
 			setState(Broker.EXIT);
-			System.out.println("[Broker] Contacting JM");
+			System.out.println("[Broker] Contacting JM at " + POPSystem.jobService);
 			// contact JM if possible
 			JobManagerService jobManager;
 			if(POPSystem.jobService != null) {
@@ -730,6 +730,7 @@ public final class Broker {
 
 					jobManager.exit();
 				} catch(Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}
