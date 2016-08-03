@@ -752,7 +752,7 @@ public final class Broker {
 	 * 
 	 * @return current state
 	 */
-	public synchronized int getState() {
+	public int getState() {
 		if (isDaemon()){
 			return Broker.RUNNING;
 		}
@@ -765,7 +765,7 @@ public final class Broker {
 	 * @param state
 	 *            state to set to this broker
 	 */
-	public synchronized void setState(int state) {
+	public void setState(int state) {
 		this.state = state;
 	}
 
