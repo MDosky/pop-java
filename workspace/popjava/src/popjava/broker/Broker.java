@@ -714,7 +714,7 @@ public final class Broker {
 		if (connectionCount <= 0){
 			setState(Broker.EXIT);
 		
-			System.out.println("[Broker] closing " + this);
+			System.out.println("[Broker] closing " + jobServiceAP);
 			// contact JM if possible
 			JobManagerService jobManager;
 			if(jobServiceAP != null) {
