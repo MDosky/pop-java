@@ -51,7 +51,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	private final Class allocatorClass;
 	
 	// running objects, map
-	private final Map<Integer, AtomicInteger> runningObjects = Collections.synchronizedMap(new HashMap<>());
+	private final Map<Integer, AtomicInteger> runningObjects = Collections.synchronizedMap(new HashMap());
 
 	// ObjectDescription used for creation
 	private ObjectDescription nod;
