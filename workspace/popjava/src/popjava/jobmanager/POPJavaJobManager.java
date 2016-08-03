@@ -129,6 +129,8 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		// increment
 		refs.incrementAndGet();
 		
+		System.out.println("[JMD] Req from " + identifier + " inc " + refs.get());
+		
 		// add to map if necessary
 		if(runningObjects.containsKey(identifier))
 			runningObjects.put(identifier, refs);
@@ -141,11 +143,14 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		AtomicInteger refs = runningObjects.getOrDefault(identifier, new AtomicInteger());
 		// decrement
 		refs.decrementAndGet();
+		
+		System.out.println("[JMD] Req from " + identifier + " dec " + refs.get());
 	}
 
 	@Override
 	@POPSyncConc
 	public int objectReport(int identifier) {
+		System.out.println("[JMD] Req from " + identifier + " con " + runningObjects.getOrDefault(identifier, new AtomicInteger()).get());
 		return runningObjects.getOrDefault(identifier, new AtomicInteger()).get();
 	}
 	
