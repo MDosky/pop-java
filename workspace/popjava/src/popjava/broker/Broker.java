@@ -915,9 +915,9 @@ public final class Broker {
 			// get JM
 			try {
 				if(Configuration.CONNECT_TO_POPCPP){
-					jobManager = PopJava.newActive(POPJobService.class, POPSystem.jobService);
+					jobManager = PopJava.newActive(POPJobService.class, jmPap);
 				} else {
-					jobManager = PopJava.newActive(POPJavaJobManager.class, POPSystem.jobService);
+					jobManager = PopJava.newActive(POPJavaJobManager.class, jmPap);
 				}
 				
 				// increment machine counter
@@ -935,14 +935,15 @@ public final class Broker {
 			broker.treatRequests();
 		}
 		
+		System.out.println("[Broker] treatRequests ended");
 		// contact JM if possible
 		if(jmPap != null) {
 			// get JM
 			try {
 				if(Configuration.CONNECT_TO_POPCPP){
-					jobManager = PopJava.newActive(POPJobService.class, POPSystem.jobService);
+					jobManager = PopJava.newActive(POPJobService.class, jmPap);
 				} else {
-					jobManager = PopJava.newActive(POPJavaJobManager.class, POPSystem.jobService);
+					jobManager = PopJava.newActive(POPJavaJobManager.class, jmPap);
 				}
 
 				// increment machine counter
