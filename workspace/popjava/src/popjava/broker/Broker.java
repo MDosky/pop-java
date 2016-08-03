@@ -81,6 +81,8 @@ public final class Broker {
 	protected int connectionCount = 0;
 	protected Semaphore sequentialSemaphore = new Semaphore(1, true);
 	
+	private static POPAccessPoint jobServiceAP;
+	
 	private ExecutorService threadPoolSequential = Executors.newSingleThreadExecutor(new ThreadFactory() {
 		
 		@Override
@@ -909,15 +911,15 @@ public final class Broker {
 		}
 		
 		JobManagerService jobManager = null;
-		POPAccessPoint jmPap = POPSystem.jobService;
+		jobServiceAP = POPSystem.jobService;
 		// contact JM if possible
-		if(jmPap != null) {
+		if(jobServiceAP != null) {
 			// get JM
 			try {
 				if(Configuration.CONNECT_TO_POPCPP){
-					jobManager = PopJava.newActive(POPJobService.class, jmPap);
+					jobManager = PopJava.newActive(POPJobService.class, jobServiceAP);
 				} else {
-					jobManager = PopJava.newActive(POPJavaJobManager.class, jmPap);
+					jobManager = PopJava.newActive(POPJavaJobManager.class, jobServiceAP);
 				}
 				
 				// increment machine counter
@@ -937,13 +939,13 @@ public final class Broker {
 		
 		System.out.println("[Broker] treatRequests ended");
 		// contact JM if possible
-		if(jmPap != null) {
+		if(jobServiceAP != null) {
 			// get JM
 			try {
 				if(Configuration.CONNECT_TO_POPCPP){
-					jobManager = PopJava.newActive(POPJobService.class, jmPap);
+					jobManager = PopJava.newActive(POPJobService.class, jobServiceAP);
 				} else {
-					jobManager = PopJava.newActive(POPJavaJobManager.class, jmPap);
+					jobManager = PopJava.newActive(POPJavaJobManager.class, jobServiceAP);
 				}
 
 				// increment machine counter
