@@ -95,10 +95,7 @@ public class ComboxReceiveRequestSocket implements Runnable {
 	 */
 	public void close() {
 		broker.onCloseConnection(hashCode() + " " +combox.peerConnection.getLocalPort()+" "+combox.peerConnection.getPort());
-	    if(combox != null){
-	        combox.close();
-	        combox = null;
-	    }
+		combox.close();
 	}
 
 	/**
@@ -130,13 +127,13 @@ public class ComboxReceiveRequestSocket implements Runnable {
 	/**
 	 * Method called before destruction of the instance
 	 */
-	@Override
-    protected void finalize() throws Throwable {
-		try {
-			close();
-		} finally {
-			super.finalize();
-		}
-	}
+//	@Override
+//    protected void finalize() throws Throwable {
+//		try {
+//			close();
+//		} finally {
+//			super.finalize();
+//		}
+//	}
 
 }
