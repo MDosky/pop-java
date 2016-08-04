@@ -933,6 +933,8 @@ public final class Broker {
 			broker.treatRequests();
 		}
 		
+		// wait before die, this could give time to some process to detecd the object
+		Thread.sleep(4000);
 		
 		// contact JM if possible
 		if(jobServiceAP != null) {

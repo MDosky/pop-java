@@ -130,7 +130,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 		refs.incrementAndGet();
 		
 		// add to map if necessary
-		if(runningObjects.containsKey(identifier))
+		if(!runningObjects.containsKey(identifier))
 			runningObjects.put(identifier, refs);
 	}
 
@@ -151,7 +151,7 @@ public class POPJavaJobManager extends POPObject implements JobManagerService {
 	public int objectReport(int identifier) {
 		AtomicInteger refs = runningObjects.get(identifier);
 		if(refs == null)
-			return -1;
+			return 0;
 		return refs.get();
 	}
 	
