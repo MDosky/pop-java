@@ -59,12 +59,12 @@ public class ComboxAcceptSecureSocket implements Runnable {
 					concurentConnections.add(connection);
 				}
 
-				Runnable runnable = new ComboxReceiveRequest(broker, requestQueue, new ComboxSecureSocket(connection));
+				ComboxSecureSocket combox = new ComboxSecureSocket(connection, broker);
+				Runnable runnable = new ComboxReceiveRequest(broker, requestQueue, combox);
 				Thread thread = new Thread(runnable, "Combox request acceptance");
 				thread.start();
 			} catch (IOException e) {
 				LogWriter.writeDebugInfo("[SSL Accept] Error while setting up connection: %s", e.getMessage());
-				break;
 			}
 		}
 		

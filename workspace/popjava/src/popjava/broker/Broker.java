@@ -49,6 +49,7 @@ import popjava.buffer.BufferFactory;
 import popjava.buffer.BufferFactoryFinder;
 import popjava.buffer.BufferXDR;
 import popjava.buffer.POPBuffer;
+import popjava.codemanager.AppService;
 import popjava.combox.Combox;
 import popjava.combox.ComboxFactory;
 import popjava.combox.ComboxFactoryFinder;
@@ -56,6 +57,8 @@ import popjava.combox.ComboxServer;
 import popjava.combox.ssl.POPTrustManager;
 import popjava.util.ssl.SSLUtils;
 import popjava.javaagent.POPJavaAgent;
+import popjava.service.jobmanager.POPJavaAppService;
+import popjava.serviceadapter.POPAppService;
 import popjava.system.POPSystem;
 import popjava.util.Configuration;
 import popjava.util.LogWriter;
@@ -1087,6 +1090,12 @@ public final class Broker {
 		String callbackString = Util.removeStringFromList(argvList, CALLBACK_PREFIX);
 		if (appservice != null && appservice.length() > 0) {
 			POPSystem.appServiceAccessPoint.setAccessString(appservice);
+			AppService service = PopJava.newActive(POPJavaAppService.class, POPSystem.appServiceAccessPoint);
+			
+			POPAccessPoint ap = PopJava.getAccessPoint(service);
+			System.out.println("...... " + service.getPOPCAppID());
+			System.out.println("...... " + ap);
+			System.out.println("...... " + ap.getFingerprint());
 		}
 		
 		Combox callback = null;

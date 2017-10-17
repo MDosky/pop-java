@@ -169,8 +169,7 @@ public class Interface {
 		
 		//Init the AP array for remote job contacts
 		POPAccessPoint[] remotejobscontact = new POPAccessPoint[1];
-		POPAccessPoint remotjob = new POPAccessPoint();
-		remotejobscontact[0] = remotjob;
+		remotejobscontact[0] = new POPAccessPoint();
 		
 		boolean canExecLocal = false;
 		canExecLocal = tryLocal(objectName, popAccessPoint, od);
@@ -226,6 +225,7 @@ public class Interface {
         	jobContact = POPSystem.jobService;
         }
 
+		// TODO there may be more ways to contact a Job Manger
         if (jobContact.isEmpty()) {
 			ComboxFactoryFinder finder = ComboxFactoryFinder.getInstance();
 			String[] jmProtocols = conf.getJobManagerProtocols();
@@ -248,12 +248,15 @@ public class Interface {
         	//if(conf.CONNECT_TO_POPCPP || conf.START_JOBMANAGER){
         	//	jobManager = PopJava.newActive(POPJobService.class, jobContact);
         	//}
-			if (conf.isConnectToPOPcpp())
+			if (conf.isConnectToPOPcpp()) {
         		jobManager = PopJava.newActive(POPJobManager.class, jobContact);
-			else if (conf.isConnectToJavaJobmanager())
+			}
+			else if (conf.isConnectToJavaJobmanager()) {
         		jobManager = PopJava.newActive(POPJavaJobManager.class, jobContact);
-			else
+			}
+			else {
         		jobManager = PopJava.newActive(POPJobService.class, jobContact);
+			}
         }catch(Exception e){
         	e.printStackTrace();
         }
@@ -261,6 +264,9 @@ public class Interface {
         if(jobManager == null){
             return false;
         }
+		
+		System.out.println("?????? " + POPSystem.appServiceAccessPoint);
+		System.out.println("?????? " + POPSystem.appServiceAccessPoint.getFingerprint());
 		
         int createdCode = jobManager.createObject(POPSystem.appServiceAccessPoint, objectName, od, allocatedAccessPoint.length, 
         		allocatedAccessPoint, remotejobscontact.length, remotejobscontact);
@@ -312,14 +318,15 @@ public class Interface {
 			String protocol = accesspoint.get(i).getProtocol();
 			ComboxFactory factory = finder.findFactory(protocol);
 			// choose the first available protocol
-			if (factory != null) {
+			if (factory != null && factory.isAvailable()) {
 				combox = factory.createClientCombox(accesspoint);
 				break;
 			}
 		}
 		
 		if (combox.connect(accesspoint, conf.getConnectionTimeout())) {
-
+			System.out.println("$$$$$$ " + accesspoint);
+			System.out.println("$$$$$$ " + accesspoint.getFingerprint());
 			BindStatus bindStatus = new BindStatus();
 			bindStatus(bindStatus);
 			switch (bindStatus.getCode()) {

@@ -285,6 +285,9 @@ public class POPSystem {
         if(coreServiceManager != null){
             appServiceAccessPoint = coreServiceManager.getAccessPoint();
 			
+			System.out.println("0000000 " + appServiceAccessPoint);
+			System.out.println("0000000 " + appServiceAccessPoint.getFingerprint());
+			
             prlt = new POPRemoteLogThread(coreServiceManager.getPOPCAppID());
             prlt.start();
         }

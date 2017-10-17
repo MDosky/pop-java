@@ -1,7 +1,10 @@
 package popjava.service.jobmanager;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -1271,10 +1274,10 @@ public class POPJavaJobManager extends POPJobService {
 			}
 			
 			// lock file
-			FileChannel channel = new RandomAccessFile(config, "rw").getChannel();
-			FileLock lock = channel.lock();
+			FileOutputStream out = new FileOutputStream(config);
+			FileLock lock = out.getChannel().lock();
 			
-			PrintStream ps = new PrintStream(config);
+			PrintStream ps = new PrintStream(new BufferedOutputStream(out));
 			
 			// resource power|memory|bandwidth
 			ps.println("# available resources for this job manager");
@@ -1329,9 +1332,9 @@ public class POPJavaJobManager extends POPJobService {
 			
 			// write and close
 			ps.close();
-			lock.release();
 		} catch(IOException e) {
 			LogWriter.writeDebugInfo("[JM] Failed to write current configuration to disk");
+			LogWriter.writeExceptionLog(e);
 		} finally {
 			
 		}

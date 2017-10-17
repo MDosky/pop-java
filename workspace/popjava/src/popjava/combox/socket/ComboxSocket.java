@@ -125,6 +125,7 @@ public class ComboxSocket extends Combox {
 				available = true;
 			} catch (IOException e) {
 				available = false;
+				LogWriter.writeExceptionLog(e);
 			}
 		}
 		return available;

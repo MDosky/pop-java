@@ -16,6 +16,7 @@ import javax.net.ssl.SSLSocketFactory;
 import popjava.base.MessageHeader;
 import popjava.baseobject.AccessPoint;
 import popjava.baseobject.POPAccessPoint;
+import popjava.broker.Broker;
 import popjava.buffer.POPBuffer;
 import popjava.combox.Combox;
 import popjava.combox.ComboxFactory;
@@ -37,17 +38,32 @@ public class ComboxSecureSocket extends Combox {
 	private static final ComboxFactory MY_FACTORY = new ComboxSecureSocketFactory();
 	
 	/**
-	 * NOTE: this is used by ServerCombox (server)
+	 * NOTE: this is used by ComboxAllocate (server)
 	 * Create a new combox on the given socket
-	 * @param socket	The socket to create the combox 
-	 * @throws IOException	Thrown is any IO exception occurred during the creation
+	 * @param socket
+	 * @throws IOException 
 	 */
 	public ComboxSecureSocket(SSLSocket socket) throws IOException {
 		peerConnection = socket;		
 		receivedBuffer = new byte[BUFFER_LENGTH];
 		inputStream = new BufferedInputStream(peerConnection.getInputStream(), STREAM_BUFFER_SIZE);
 		outputStream = new BufferedOutputStream(peerConnection.getOutputStream(), STREAM_BUFFER_SIZE);
+	}
+	
+	/**
+	 * NOTE: this is used by ServerCombox (server)
+	 * Create a new combox on the given socket
+	 * @param socket	The socket to create the combox 
+	 * @throws IOException	Thrown is any IO exception occurred during the creation
+	 */
+	public ComboxSecureSocket(SSLSocket socket, Broker broker) throws IOException {
+		accessPoint = broker.getAccessPoint();
+		peerConnection = socket;		
+		receivedBuffer = new byte[BUFFER_LENGTH];
+		inputStream = new BufferedInputStream(peerConnection.getInputStream(), STREAM_BUFFER_SIZE);
+		outputStream = new BufferedOutputStream(peerConnection.getOutputStream(), STREAM_BUFFER_SIZE);
 		extractFingerprint();
+		System.out.println("!!!!!! in sock const " + accessPoint);
 	}
 
 	/**
@@ -101,44 +117,50 @@ public class ComboxSecureSocket extends Combox {
 	 */
 	@Override
 	public boolean connect() {
-		try {			
-			SSLContext sslContext = SSLUtils.getSSLContext();
-			SSLSocketFactory factory = sslContext.getSocketFactory();
+		SSLContext sslContext;
+		SSLSocketFactory factory;
+		try {
+			sslContext = SSLUtils.getSSLContext();
+			factory = sslContext.getSocketFactory();
+		} catch (Exception e) {
+			LogWriter.writeExceptionLog(e);
+			return false;
+		}
 
-			available = false;
-			int accessPointSize = accessPoint.size();
-			for (int i = 0; i < accessPointSize && !available; i++) {
-				AccessPoint ap = accessPoint.get(i);
-				if (ap.getProtocol().compareToIgnoreCase(
-						ComboxSecureSocketFactory.PROTOCOL) != 0){
-					continue;
-				}
-				String host = ap.getHost();
-				int port = ap.getPort();
-				try {
-					// Create an unbound socket
-					SocketAddress sockaddress = new InetSocketAddress(host, port);
-					if (timeOut > 0) {
-						peerConnection = (SSLSocket) factory.createSocket();
-
-						//LogWriter.writeExceptionLog(new Exception());
-						//LogWriter.writeExceptionLog(new Exception("Open connection to "+host+":"+port+" remote: "+peerConnection.getLocalPort()));
-					} else {
-						peerConnection = (SSLSocket) factory.createSocket();
-						timeOut = 0;
-					}					
-					peerConnection.connect(sockaddress);
-					inputStream = new BufferedInputStream(peerConnection.getInputStream());
-					outputStream = new BufferedOutputStream(peerConnection.getOutputStream());
-					
-					extractFingerprint();
-					
-					available = true;
-				} catch (IOException e) {
-					available = false;
-				}
+		available = false;
+		int accessPointSize = accessPoint.size();
+		for (int i = 0; i < accessPointSize && !available; i++) {
+			AccessPoint ap = accessPoint.get(i);
+			if (ap.getProtocol().compareToIgnoreCase(
+					ComboxSecureSocketFactory.PROTOCOL) != 0){
+				continue;
 			}
-		} catch (Exception e) {}
+			String host = ap.getHost();
+			int port = ap.getPort();
+			try {
+				// Create an unbound socket
+				SocketAddress sockaddress = new InetSocketAddress(host, port);
+				if (timeOut > 0) {
+					peerConnection = (SSLSocket) factory.createSocket();
+
+					//LogWriter.writeExceptionLog(new Exception());
+					//LogWriter.writeExceptionLog(new Exception("Open connection to "+host+":"+port+" remote: "+peerConnection.getLocalPort()));
+				} else {
+					peerConnection = (SSLSocket) factory.createSocket();
+					timeOut = 0;
+				}					
+				peerConnection.connect(sockaddress);
+				inputStream = new BufferedInputStream(peerConnection.getInputStream());
+				outputStream = new BufferedOutputStream(peerConnection.getOutputStream());
+
+				extractFingerprint();
+
+				available = true;
+			} catch (IOException e) {
+				LogWriter.writeExceptionLog(e);
+				available = false;
+			}
+		}
 		
 		return available;
 	}
@@ -297,7 +319,7 @@ public class ComboxSecureSocket extends Combox {
 				}
 			}
 		} catch (Exception e) {
-			
+			LogWriter.writeExceptionLog(e);
 		}
 	}
 }

@@ -35,6 +35,10 @@ public class POPConnectorJobManager extends POPConnectorBase implements POPConne
 	@Override
 	public int createObject(POPAccessPoint localservice, String objname, ObjectDescription od,
 			int howmany, POPAccessPoint[] objcontacts, int howmany2, POPAccessPoint[] remotejobcontacts) {
+		
+		System.out.println("&&&&&& " + localservice);
+		System.out.println("&&&&&& " + localservice.getFingerprint());
+		
 		// check local resource
 		Resource currAva = jobManager.getAvailableResources();
 		// od request
